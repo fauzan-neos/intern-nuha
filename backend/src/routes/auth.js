@@ -17,7 +17,9 @@ router.get('/me', authMiddleware, (req, res) => {
 router.post('/logout', (req, res) => {
     res.clearCookie('token', {
         httpOnly: true,
-        secure: false
+        secure: false,
+        sameSite: 'lax',
+        path: '/'
     });
     res.json({ message: "Logged out successfully" });
 });

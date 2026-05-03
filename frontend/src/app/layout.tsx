@@ -6,6 +6,7 @@ import "./globals.css"
 import Navbar from "./navbar";
 import { usePathname } from "next/navigation";
 import { Toaster } from 'react-hot-toast';
+import Providers from "../lib/provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,7 +18,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const disableNavbarPaths = ["/login", "/register", "/dashboard", "/dashboard/about"];
+// const disableNavbarPaths = ["/login", "/register", "/dashboard", "/dashboard/about"];
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -35,17 +36,18 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        {!disableNavbarPaths.includes(usePathname()) && <Navbar></Navbar>}
-        {children}
+        <Providers>
+          {children}
 
-        <Toaster position="top-right" 
-          toastOptions={{
-            style: {
-              borderRadius: "10px",
-              padding: "16px",
-            }
-          }}
-        />
+          <Toaster position="top-right" 
+            toastOptions={{
+              style: {
+                borderRadius: "10px",
+                padding: "16px",
+              }
+            }}
+          />
+        </Providers>
       </body>
     </html>
   );

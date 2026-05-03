@@ -44,10 +44,11 @@ export async function createUser(fullname: string, email: string, password: stri
 
     const data = await res.json();
 
-    return {
-        ok: res.ok,
-        data
+    if (!res.ok) {
+        throw new Error(data.message);
     }
+
+    return data;
 }
 
 export async function loginUser(email: string, password: string) {
@@ -62,8 +63,9 @@ export async function loginUser(email: string, password: string) {
 
     const data = await res.json();
 
-    return {
-        ok: res.ok,
-        data
-    };
+    if (!res.ok) {
+        throw new Error(data.message);
+    }
+
+    return data
 }
