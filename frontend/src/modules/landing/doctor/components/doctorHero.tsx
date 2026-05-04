@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -17,7 +16,7 @@ export default function HeroSection() {
       />
 
       {/* OVERLAY */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/50" />
+      <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/60 to-black/50" />
 
       {/* CONTENT */}
       <div className="relative z-10 max-w-6xl mx-auto px-6">

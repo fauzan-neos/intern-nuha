@@ -1,7 +1,10 @@
 import Doctor from "@/src/modules/landing/doctor"
+import { Suspense } from "react";
 
 export default function DoctorPage() {
     return (
-        <Doctor/>
+        <Suspense fallback={null}>
+            <Doctor/>
+        </Suspense>
     )
 }

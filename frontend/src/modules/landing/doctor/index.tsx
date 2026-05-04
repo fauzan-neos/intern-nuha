@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter, useSearchParams } from "next/navigation";
 import { fetchUser } from "@/src/lib/api";
 import Navbar from "../../components/navbar";
 import DoctorList from "./components/doctorList";
@@ -12,7 +13,9 @@ import SpecializationList from "./components/specializationList";
 
 export default function HomePage() {
   const [search, setSearch] = useState("");
-  const [selectedSpec, setSelectedSpec] = useState<string | null>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const selectedSpec = searchParams.get("specialization");
 
   const { isSuccess } = useQuery({
     queryKey: ["auth", "user"],
@@ -25,14 +28,16 @@ export default function HomePage() {
       <DoctorFilter search={search} setSearch={setSearch} />
       {!selectedSpec ? (
         <>
-          <h2 className="text-xl font-semibold">Choose Specialization</h2>
-          <SpecializationList onSelect={setSelectedSpec} />
+          <h2 className="text-xl font-semibold">Pilih Spesialisasi</h2>
+          <SpecializationList />
         </>
       ) : (
         <>
           <button
-            onClick={() => setSelectedSpec(null)}
-            className="text-blue-600"
+            onClick={() => {
+              router.replace("/doctor", { scroll: false });
+            }}
+            className="text-teal-700"
           >
             &larr; Back
           </button>
@@ -47,23 +52,26 @@ export default function HomePage() {
     <>
       <Navbar />
       {isSuccess ? (
-        <main className="min-h-screen bg-slate-50 px-5 pb-12 pt-28 text-gray-900">
-          <div className="mx-auto max-w-6xl space-y-6">
-            <div>
-              <p className="text-sm font-medium text-teal-700">
-                Portal Pasien
-              </p>
-              <h1 className="mt-1 text-3xl font-semibold">
-                Cari dan booking dokter
-              </h1>
-              <p className="mt-2 max-w-2xl text-sm text-gray-600">
-                Pilih spesialisasi atau cari dokter yang sesuai dengan
-                kebutuhan konsultasi Anda.
-              </p>
+        <div>
+          <main className="min-h-screen bg-slate-50 px-5 pb-12 pt-28 text-gray-900">
+            <div className="mx-auto max-w-6xl space-y-6">
+              <div>
+                <p className="text-sm font-medium text-teal-700">
+                  Portal Pasien
+                </p>
+                <h1 className="mt-1 text-3xl font-semibold">
+                  Cari dan booking dokter
+                </h1>
+                <p className="mt-2 max-w-2xl text-sm text-gray-600">
+                  Pilih spesialisasi atau cari dokter yang sesuai dengan
+                  kebutuhan konsultasi Anda.
+                </p>
+              </div>
+              {doctorContent}
             </div>
-            {doctorContent}
-          </div>
-        </main>
+          </main>
+          <Footer />
+        </div>
       ) : (
         <>
           <DoctorHero />

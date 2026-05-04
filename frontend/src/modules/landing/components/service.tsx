@@ -1,15 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { specializations } from "@/src/lib/dummy";
 import Link from "next/link";
 
 export default function Service() {
-  const [showAll, setShowAll] = useState(false);
-
-  const displayed = showAll
-    ? specializations
-    : specializations.slice(0, 8);
+  const displayed = specializations.slice(0, 8);
 
   return (
     <div className="mt-20 px-10">

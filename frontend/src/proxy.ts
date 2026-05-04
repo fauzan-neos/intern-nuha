@@ -7,13 +7,13 @@ export function proxy(request: NextRequest) {
 
 
     const isAuthPage = pathname === "/" || pathname === "/register" || pathname === "/login";
-    const isDashboardPage = pathname.startsWith("/dashboard");
+    const isProtectedPage = pathname.startsWith("/dashboard") || pathname.startsWith("/booking");
 
     if(token && isAuthPage) {
         return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
-    if(!token && isDashboardPage) {
+    if(!token && isProtectedPage) {
         return NextResponse.redirect(new URL("/login", request.url));
     }
 

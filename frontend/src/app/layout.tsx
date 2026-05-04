@@ -3,8 +3,6 @@
 // import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css"
-import Navbar from "./navbar";
-import { usePathname } from "next/navigation";
 import { Toaster } from 'react-hot-toast';
 import Providers from "../lib/provider";
 
@@ -18,7 +16,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// const disableNavbarPaths = ["/login", "/register", "/dashboard", "/dashboard/about"];
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",

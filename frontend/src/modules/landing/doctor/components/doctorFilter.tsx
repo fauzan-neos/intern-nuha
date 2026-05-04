@@ -19,7 +19,7 @@ export default function DoctorFilter({ search, setSearch }: Props) {
       />
 
       {/* FILTER BUTTON */}
-      <button className="bg-blue-600 text-white px-4 rounded-md">
+      <button className="bg-teal-600 text-white px-4 rounded-md">
         Apply
       </button>
     </div>

@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 // import type { Metadata } from "next";
 import "../globals.css";
-import Navbar from "./navbar";
 import { fetchUser } from "@/src/lib/api";
 import { useRouter } from "next/navigation";
 
