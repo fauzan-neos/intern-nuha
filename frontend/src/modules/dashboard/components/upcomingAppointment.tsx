@@ -1,5 +1,6 @@
 import { BookingHistoryRow } from "@/src/lib/dummy";
 import { Calendar, Clock, MapPin } from "lucide-react";
+import Image from "next/image";
 
 type Props = {
   appointment: BookingHistoryRow | null;
@@ -23,10 +24,11 @@ export default function UpcomingAppointment({ appointment }: Props) {
       <h2 className="text-lg font-semibold text-slate-800 mb-4">Upcoming Appointment</h2>
       
       <div className="flex items-start gap-4">
-        <div className="relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0 bg-slate-100 border border-slate-100">
-          <img 
+        <div className="relative w-16 h-16 rounded-full overflow-hidden shrink-0 bg-slate-100 border border-slate-100">
+          <Image 
             src={appointment.doctorImage} 
             alt={appointment.doctorName}
+            fill
             className="w-full h-full object-cover"
           />
         </div>

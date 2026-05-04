@@ -92,7 +92,7 @@ export default function LoginForm() {
                         </button>
 
                         <p className="text-sm text-center text-gray-500">
-                            Belum punya akun?{" "}
+                            Belum punya akun?
                             <Link href="/register" className="text-teal-600 font-medium">
                             Daftar sekarang
                             </Link>
