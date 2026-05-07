@@ -1,0 +1,192 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js" 
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  uuid       String    @unique @default(uuid())     
+  fullname   String    
+  email      String    @unique 
+  password   String    
+  role       Role      @default(USER) 
+  image      String?   
+  createdAt  DateTime  @default(now()) @map("created_at") 
+  updatedAt  DateTime  @updatedAt @map("updated_at")     
+  deletedAt  DateTime? @map("deleted_at")               
+  deletedBy  Int?      @map("deleted_by")              
+
+  // relasi
+  patient    Patient?  // User bisa punya profil pasien
+  bookings   Booking[] // User bisa buat banyak booking
+
+  @@map("users") 
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Specialization {
+  id          Int      @id @default(autoincrement())
+  uuid        String   @unique @default(uuid())
+  name        String   @unique 
+  code        String   @unique
+  description String   @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // relasi
+  doctors     Doctor[] 
+
+  @@map("specializations")
+}
+
+model Doctor {
+  id               Int            @id @default(autoincrement())
+  uuid             String         @unique @default(uuid())
+  name             String
+  isActive         Boolean        @default(true) @map("is_active")
+  employeeCode     String         @unique @map("employee_code")
+  email            String         @unique
+  image            String?
+  experienceYears  Int            @default(0) @map("experience_years")
+  weeklyBooking    Int            @default(0) @map("weekly_booking")
+  rating           Float          @default(0.0)
+  department       String?        @map("department")
+  room             String?        @map("room")
+  location         String?        @map("location")
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+  deletedAt        DateTime?      @map("deleted_at")
+  deletedBy        Int?           @map("deleted_by")
+
+  // relasi
+  specialization   Specialization @relation(fields: [specializationId], references: [id])
+  specializationId Int            @map("specialization_id")
+  schedules        DoctorSchedule[]
+  bookings         Booking[]
+
+  @@map("doctors")
+}
+
+model DoctorSchedule {
+  id             Int            @id @default(autoincrement())
+  uuid           String         @unique @default(uuid())
+  day            Weekday
+  date           DateTime?    
+  status         ScheduleStatus @default(AVAILABLE) @map("schedule_status")
+  maxPatient     Int            @default(12) @map("max_patient") 
+  start          String         
+  end            String        
+  note           String?        @db.Text
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  // relasi
+  doctor         Doctor         @relation(fields: [doctorId], references: [id])
+  doctorId       Int            @map("doctor_id")
+  bookings       Booking[]
+
+  @@map("doctor_schedules")
+}
+
+enum Weekday {
+  SUN
+  MON
+  TUE
+  WED
+  THU
+  FRI
+  SAT
+}
+
+enum ScheduleStatus {
+  AVAILABLE
+  OFF
+}
+
+model Patient {
+  id            Int       @id @default(autoincrement())
+  uuid          String    @unique @default(uuid())
+  rekamMedisId  String    @unique @map("rekam_medis_id") // RM-001
+  nik           String    @unique
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // relasi
+  user          User      @relation(fields: [userId], references: [id])
+  userId        Int       @unique @map("user_id")
+  bookings      Booking[]
+
+  @@map("patients")
+}
+
+model Booking {
+  id                Int           @id @default(autoincrement())
+  uuid              String        @unique @default(uuid())
+  bookingCode       String        @unique @map("booking_code") // SW-1
+  bookingStatus     BookingStatus @default(BOOKED) @map("booking_status")
+  
+  // Data Identitas (Dari Modal Booking)
+  patientName       String        @map("patient_name")
+  nik               String
+  birthDate         String        @map("birth_date")
+  gender            String
+  phone             String
+  address           String        @db.Text
+  paymentMethod     String        @map("payment_method")
+  complaint         String        @db.Text
+  
+  appointmentDate   String        @map("appointment_date")
+  appointmentStartTime   String        @map("appointment_start_time")
+  appointmentEndTime   String        @map("appointment_end_time")
+  instructions      String?       @db.Text
+  
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+  deletedAt         DateTime?     @map("deleted_at")
+  deletedBy         Int?          @map("deleted_by")
+
+  // relasi
+  userId            Int           @map("user_id")
+  user              User          @relation(fields: [userId], references: [id])
+  
+  doctorId          Int           @map("doctor_id")
+  doctor            Doctor        @relation(fields: [doctorId], references: [id])
+
+  scheduleId        Int            @map("schedule_id")
+  schedule          DoctorSchedule @relation(fields: [scheduleId], references: [id])
+
+  patientId         Int?          @map("patient_id")
+  patient           Patient?      @relation(fields: [patientId], references: [id])
+
+  // relasi jika ada jadwal yang dipindah (Reschedule)
+  rescheduledFrom   Booking?      @relation("Reschedule", fields: [rescheduledFromId], references: [id])
+  rescheduledFromId Int?          @unique @map("rescheduled_from_id")
+  rescheduledTo     Booking?      @relation("Reschedule")
+
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  BOOKED
+  REGISTERED
+  COMPLETED
+}
+
+model HospitalUpdate {
+  id          Int      @id @default(autoincrement())
+  uuid        String   @unique @default(uuid())
+  title       String
+  description String   @db.Text
+  image       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("hospital_updates")
+}
