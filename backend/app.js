@@ -13,6 +13,9 @@ var aboutRouter = require('./src/routes/about');
 // var registerRouter = require('./src/routes/register');
 // var loginRouter = require('./src/routes/login');
 var authRouter = require('./src/routes/auth');
+var doctorRouter = require('./src/routes/doctor');
+var bookingRouter = require('./src/routes/booking');
+var hospitalRouter = require('./src/routes/hospital');
 
 var app = express();
 
@@ -38,6 +41,9 @@ app.use('/about', aboutRouter);
 // app.use('/', registerRouter);
 // app.use('/', loginRouter);
 app.use('/', authRouter);
+app.use('/api', doctorRouter);
+app.use('/api/bookings', bookingRouter);
+app.use('/api/hospital-updates', hospitalRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

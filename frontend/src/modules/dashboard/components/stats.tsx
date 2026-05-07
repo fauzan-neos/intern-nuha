@@ -12,7 +12,7 @@ export default function Stats({ activeAppointments }: Props) {
           <CalendarCheck className="w-6 h-6 text-teal-600" />
         </div>
         <div>
-          <p className="text-sm font-medium text-slate-500">Active Appointments</p>
+          <p className="text-sm font-medium text-slate-500">Jadwal Aktif</p>
           <h2 className="text-2xl font-bold text-slate-900">
             {activeAppointments}
           </h2>

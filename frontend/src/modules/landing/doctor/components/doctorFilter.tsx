@@ -7,21 +7,21 @@ type Props = {
 
 export default function DoctorFilter({ search, setSearch }: Props) {
   return (
-    <div className="flex gap-4 mt-6">
+    <div className="flex gap-4 mt-6 w-3/4">
       
       {/* SEARCH */}
       <input
         type="text"
-        placeholder="Search doctor..."
+        placeholder="Cari dokter..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="flex-1 border px-4 py-2 rounded-md outline-1 text-gray-600"
       />
 
-      {/* FILTER BUTTON */}
+      {/* FILTER BUTTON
       <button className="bg-teal-600 text-white px-4 rounded-md">
         Apply
-      </button>
+      </button> */}
     </div>
   );
 }

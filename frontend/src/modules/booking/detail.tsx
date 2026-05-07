@@ -3,16 +3,41 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { getBookingHistoryByCode } from "@/src/lib/dummy";
+import { useQuery } from "@tanstack/react-query";
 import BookingDetailDoctorCard from "./components/BookingDetailDoctorCard";
 import BookingDetailHeader from "./components/BookingDetailHeader";
 import BookingDetailSummary from "./components/BookingDetailSummary";
 import BookingInfoCard from "./components/BookingInfoCard";
 import PreAppointmentInstructions from "./components/PreAppointmentInstructions";
+import { fetchBookingDetail, fetchDoctors } from "@/src/lib/api";
+import { formatBookingHistoryRows } from "@/src/utils/doctorHelper";
 
 export default function BookingDetail() {
   const params = useParams<{ bookingCode: string }>();
-  const booking = getBookingHistoryByCode(params.bookingCode);
+  
+  const { data: rawBooking, isLoading: bookingLoading } = useQuery({
+    queryKey: ["booking", params.bookingCode],
+    queryFn: () => fetchBookingDetail(params.bookingCode),
+    enabled: !!params.bookingCode,
+  });
+
+  const { data: doctorsData } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: fetchDoctors,
+  });
+
+  if (bookingLoading || !doctorsData) {
+    return (
+      <main className="min-h-screen bg-slate-50 px-6 py-10 text-gray-900">
+        <div className="mx-auto max-w-6xl text-center py-20 text-teal-600 animate-pulse font-medium">
+          Memuat detail booking...
+        </div>
+      </main>
+    );
+  }
+
+  // Transform ke format UI (BookingHistoryRow)
+  const booking = rawBooking ? formatBookingHistoryRows([rawBooking], doctorsData)[0] : null;
 
   if (!booking) {
     return (
@@ -23,12 +48,12 @@ export default function BookingDetail() {
             className="inline-flex items-center gap-2 text-sm font-semibold text-teal-700"
           >
             <ArrowLeft className="size-4" />
-            Back to My Bookings
+            Kembali ke Booking Saya
           </Link>
           <div className="rounded-lg border border-gray-200 bg-white p-8">
             <h1 className="text-2xl font-semibold">Booking tidak ditemukan</h1>
             <p className="mt-2 text-sm text-gray-600">
-              Kode booking tidak tersedia di data dummy saat ini.
+              Kode booking {params.bookingCode} tidak ditemukan di sistem.
             </p>
           </div>
         </div>

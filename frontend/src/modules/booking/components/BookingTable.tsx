@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookingHistoryRow } from "@/src/lib/dummy";
+import { BookingHistoryRow } from "@/src/lib/types";
 import BookingStatusBadge from "./BookingStatusBadge";
 
 type Props = {
@@ -10,7 +10,7 @@ export default function BookingTable({ bookings }: Props) {
   return (
     <div className="overflow-hidden rounded-md border border-gray-200 bg-white">
       <div className="grid grid-cols-6 border-b border-gray-200 bg-gray-50 px-5 py-3 text-sm font-semibold text-gray-600">
-        <span>Kode</span>
+        <span>Nomor Antrian</span>
         <span>Dokter</span>
         <span>Spesialisasi</span>
         <span>Jadwal</span>
@@ -29,10 +29,10 @@ export default function BookingTable({ bookings }: Props) {
           <span>{booking.doctorName}</span>
           <span>{booking.specialization}</span>
           <span>
-            {booking.appointmentDate} at {booking.appointmentTime}
+            {booking.appointmentDate}, {booking.appointmentStartTime} - {booking.appointmentEndTime}
           </span>
           <span>
-            <BookingStatusBadge status={booking.status} />
+            <BookingStatusBadge status={booking.bookingStatus} />
           </span>
           <Link
             href={`/booking/${booking.bookingCode}`}

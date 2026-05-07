@@ -1,4 +1,4 @@
-import { UpcomingScheduleItem } from "@/src/lib/dummy";
+import { ScheduleStatus, UpcomingScheduleItem } from "@/src/lib/types";
 
 type Availability = {
   label: string;
@@ -13,31 +13,31 @@ type Props = {
 export function getAvailabilityLabel(
   schedule: UpcomingScheduleItem[],
 ): Availability {
-  const availableIndex = schedule.findIndex((item) => item.status === "available");
+  const availableIndex = schedule.findIndex((item) => item.status === ("AVAILABLE" as ScheduleStatus));
 
   if (availableIndex === 0) {
     return {
-      label: "Available Today",
+      label: "Tersedia Hari Ini",
       tone: "available",
     };
   }
 
   if (availableIndex === 1) {
     return {
-      label: "Next Avail: Tomorrow",
+      label: "Tersedia Berikutnya: Besok",
       tone: "next",
     };
   }
 
   if (availableIndex > 1) {
     return {
-      label: `Next Avail: ${schedule[availableIndex].dayLabel}`,
+      label: `Tersedia Berikutnya: ${schedule[availableIndex].dayLabel}`,
       tone: "next",
     };
   }
 
   return {
-    label: "No Schedule",
+    label: "Tidak Ada Jadwal",
     tone: "off",
   };
 }

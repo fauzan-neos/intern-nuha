@@ -1,4 +1,4 @@
-import { Access } from "@/src/lib/dummy";
+import { Access } from "@/src/lib/types";
 
 type Props = {
   items: Access[];
@@ -7,7 +7,7 @@ type Props = {
 export default function QuickAccess({ items }: Props) {
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold text-slate-800">Quick Access</h2>
+      <h2 className="text-lg font-semibold text-slate-800">Akses Cepat</h2>
 
       <div className="grid grid-cols-2 gap-4">
         {items.map((item) => (

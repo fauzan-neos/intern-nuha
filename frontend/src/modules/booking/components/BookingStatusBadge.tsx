@@ -1,11 +1,15 @@
-import { BookingStatus } from "@/src/lib/dummy";
+import { BookingStatus } from "@/src/lib/types";
 
 type Props = {
   status: BookingStatus;
 };
 
-export function formatBookingStatus(status: string) {
-  return status.charAt(0).toUpperCase() + status.slice(1);
+export function formatBookingStatus(status?: string) {
+  if (!status) return "Unknown";
+
+  return status.toLowerCase()
+    .replace("_", " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 export default function BookingStatusBadge({ status }: Props) {

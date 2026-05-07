@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
-import { fetchUser } from "@/src/lib/api";
+import { fetchDoctors, fetchUser } from "@/src/lib/api";
 import Navbar from "../../components/navbar";
 import DoctorList from "./components/doctorList";
 import DoctorFilter from "./components/doctorFilter";
@@ -23,14 +23,26 @@ export default function HomePage() {
     retry: false,
   });
 
+  const { data: doctors, isLoading } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: fetchDoctors,
+  })
+
   const doctorContent = (
     <>
       <DoctorFilter search={search} setSearch={setSearch} />
       {!selectedSpec ? (
-        <>
-          <h2 className="text-xl font-semibold">Pilih Spesialisasi</h2>
-          <SpecializationList />
-        </>
+        search ? (
+          <div className="mt-8">
+            <h2 className="text-xl font-semibold mb-4">Hasil Pencarian: "{search}"</h2>
+            <DoctorList specialization={null} search={search} />
+          </div>
+        ) : (
+          <>
+            <h2 className="text-xl font-semibold">Pilih Spesialisasi</h2>
+            <SpecializationList />
+          </>
+        )
       ) : (
         <>
           <button
@@ -39,10 +51,10 @@ export default function HomePage() {
             }}
             className="text-teal-700"
           >
-            &larr; Back
+            &larr; Kembali
           </button>
           <h2 className="text-xl font-semibold">{selectedSpec} Doctors</h2>
-          <DoctorList specialization={selectedSpec} />
+          <DoctorList specialization={selectedSpec} search={search} />
         </>
       )}
     </>

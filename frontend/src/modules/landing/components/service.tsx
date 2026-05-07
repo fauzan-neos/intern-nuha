@@ -1,10 +1,18 @@
 "use client";
 
-import { specializations } from "@/src/lib/dummy";
+import { useQuery } from "@tanstack/react-query";
+import { fetchSpecializations } from "@/src/lib/api";
 import Link from "next/link";
 
 export default function Service() {
-  const displayed = specializations.slice(0, 8);
+  const { data: specializations, isLoading } = useQuery({
+    queryKey: ["specializations"],
+    queryFn: fetchSpecializations,
+  });
+
+  const displayed = specializations?.slice(0, 8) || [];
+
+  if (isLoading) return <div className="mt-20 px-10 text-center py-10 text-gray-500">Loading services...</div>;
 
   return (
     <div className="mt-20 px-10">
@@ -19,9 +27,9 @@ export default function Service() {
         </div>
 
         <Link href={"/doctor"}
-          className="text-teal-600 font-medium"
+          className="text-teal-600 font-medium hover:text-teal-700 transition-colors"
         >
-          Show more
+          Lihat Semua
         </Link>
       </div>
 
@@ -30,12 +38,12 @@ export default function Service() {
         {displayed.map((item) => (
           <div
             key={item.id}
-            className="border rounded-xl p-6 hover:shadow-md transition"
+            className="border rounded-xl p-6 hover:shadow-md transition hover:border-teal-100 bg-white"
           >
             <h3 className="font-semibold mb-2 text-gray-900">
               {item.name}
             </h3>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 line-clamp-3">
               {item.description}
             </p>
           </div>

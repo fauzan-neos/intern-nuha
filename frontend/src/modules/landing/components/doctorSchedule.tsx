@@ -2,86 +2,98 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { doctors, getTopDoctors } from "@/src/lib/dummy";
-
-const days = ["mon", "tue", "wed", "thu", "fri"];
+import { useQuery } from "@tanstack/react-query";
+import { getTopDoctors } from "@/src/lib/types";
+import { fetchDoctors } from "@/src/lib/api";
+import { getUpcomingSchedule } from "@/src/utils/doctorHelper";
 
 export default function DoctorAvailability() {
-  const topDoctors = getTopDoctors(doctors)
+  const { data: doctorsData, isLoading } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: fetchDoctors,
+  });
+
+  const topDoctors = doctorsData ? getTopDoctors(doctorsData) : [];
+
+  // Hitung 5 hari ke depan secara dinamis untuk header
+  const upcomingDays = Array.from({ length: 5 }, (_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() + i);
+    return d.toLocaleDateString("id-ID", { weekday: "long"});
+  });
+
+  if (isLoading) return <div className="mt-20 px-10 text-center py-10">Loading schedules...</div>;
+
+  
 
   return (
     <div className="mt-20 px-10">
       <h2 className="text-2xl font-bold mb-2 text-gray-900">
         Dokter Terbaik Mingguan
       </h2>
-      {/* <p className="text-gray-500 mb-6">
-        View real-time availability for our lead specialists this week.
-      </p> */}
 
-      <div className="border rounded-xl overflow-hidden">
+      <div className="border rounded-xl overflow-hidden shadow-sm">
         {/* HEADER */}
-        <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-gray-100 p-4 text-sm font-semibold text-gray-500">
-          <div>Specialist</div>
-          <div>Mon</div>
-          <div>Tue</div>
-          <div>Wed</div>
-          <div>Thu</div>
-          <div>Fri</div>
-          <div className="text-right pr-2">Action</div>
+        <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-slate-50 p-4 text-sm font-semibold text-gray-500 border-b">
+          <div>Spesialis</div>
+          {upcomingDays.map((day, idx) => (
+            <div key={idx} className={idx === 0 ? "text-teal-700" : ""}>
+              {idx === 0 ? "Today" : day}
+            </div>
+          ))}
+          <div className="text-right pr-2">Aksi</div>
         </div>
 
         {/* ROWS */}
-        {topDoctors.map((doc) => (
-          <div
-            key={doc.id}
-            className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center border-t p-4"
-          >
-            {/* DOCTOR */}
-            <div className="flex items-center gap-3">
-              <Image
-                src={doc.image}
-                alt={doc.name}
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-              <div>
-                <p className="font-medium text-gray-900">{doc.name}</p>
-                <p className="text-xs text-gray-500">
-                  {doc.specialization}
-                </p>
+        {topDoctors.map((doc) => {
+          const scheduleItems = getUpcomingSchedule(doc.schedules);
+          
+          return (
+            <div
+              key={doc.id}
+              className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center border-t p-4 hover:bg-slate-50/50 transition-colors"
+            >
+              {/* DOCTOR */}
+              <div className="flex items-center gap-3">
+                <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full ring-1 ring-slate-200">
+                  <Image
+                    src={doc.image || "/doc_sarah.jpg"}
+                    alt={doc.name}
+                    fill
+                    className="object-cover"
+                    sizes="40px"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <p className="font-medium text-gray-900 truncate">{doc.name}</p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {doc.specialization?.name}
+                  </p>
+                </div>
+              </div>
+
+              {/* SCHEDULE */}
+              {scheduleItems.map((item) => (
+                <div key={item.date}>
+                  {item.status === "AVAILABLE" ? (
+                    <span className="inline-block bg-teal-700 text-white text-[10px] md:text-xs px-2 py-0.5 rounded-full whitespace-nowrap">
+                      {item.timeLabel}
+                    </span>
+                  ) : (
+                    <span className="text-gray-400 text-xs">Tidak ada jadwal</span>
+                  )}
+                </div>
+              ))}
+
+              {/* ACTION */}
+              <div className="text-right pr-2">
+                <Link href={"/login"} className="text-teal-700 font-bold hover:text-teal-800 text-sm">
+                  Booking
+                </Link>
               </div>
             </div>
-
-            {/* SCHEDULE */}
-            {days.map((day) => {
-              const sched = doc.schedules.find(s => s.day === day);
-
-              if (!sched || !sched.start) {
-                return (
-                  <div key={day} className="text-gray-400 text-sm">
-                    Unavailable
-                  </div>
-                );
-              }
-
-              return (
-                <div key={day}>
-                  <span className="bg-teal-700 text-white text-xs px-3 py-1 rounded-full">
-                    {sched.start} - {sched.end}
-                  </span>
-                </div>
-              );
-            })}
-
-            {/* ACTION */}
-            <div className="text-right pr-2">
-              <Link href={"/login"} className="text-teal-600 font-bold ">
-                Book
-              </Link>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

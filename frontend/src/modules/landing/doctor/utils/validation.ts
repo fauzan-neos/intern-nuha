@@ -14,10 +14,12 @@ export const bookingSchema = z.object({
     .regex(/^[0-9+\-\s]{8,15}$/, { message: "Nomor telepon tidak valid" }),
   email: z.email({ message: "Email tidak valid" }),
   address: z.string().min(5, { message: "Alamat minimal 5 karakter" }),
-  paymentMethod: z.enum(["insurance", "bpjs"], {
+  paymentMethod: z.enum(["umum", "bpjs"], {
     message: "Asuransi wajib dipilih",
   }),
   complaint: z.string().min(5, { message: "Keluhan utama minimal 5 karakter" }),
+  appointmentDate: z.string().min(1, "Silakan pilih tanggal kunjungan"),
+  scheduleId: z.number(),
   slotStart: z.string().min(1, { message: "Pilih jadwal konsultasi" }),
 });
 

@@ -2,14 +2,27 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/src/modules/components/navbar";
-import { getBookingHistoryRows } from "@/src/lib/dummy";
 import { useAuthUser } from "@/src/modules/auth/hooks/useAuthUser";
 import BookingTable from "./components/BookingTable";
+import { fetchMyBookings, fetchDoctors } from "@/src/lib/api";
+import { formatBookingHistoryRows } from "@/src/utils/doctorHelper";
 
 export default function Booking() {
   const router = useRouter();
-  const { data: user, isLoading, isError } = useAuthUser();
+  const { data: user, isLoading: userLoading, isError } = useAuthUser();
+
+  const { data: rawBookings, isLoading: bookingsLoading } = useQuery({
+    queryKey: ["my-bookings"],
+    queryFn: fetchMyBookings,
+    enabled: !!user,
+  });
+
+  const { data: doctorsData } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: fetchDoctors,
+  });
 
   useEffect(() => {
     if (isError) {
@@ -17,15 +30,23 @@ export default function Booking() {
     }
   }, [isError, router]);
 
-  if (isLoading || !user) {
+  if (userLoading || bookingsLoading || !user) {
     return (
       <main className="min-h-screen bg-slate-50 px-5 pt-28 text-gray-900">
         <Navbar />
-        <div className="mx-auto max-w-6xl">Loading...</div>
+        <div className="mx-auto max-w-6xl text-center py-20 text-teal-600 animate-pulse">
+          Memuat riwayat booking...
+        </div>
       </main>
     );
   }
 
+  const bookings =
+  rawBookings && doctorsData
+    ? formatBookingHistoryRows(rawBookings, doctorsData)
+    : [];
+
+    
   return (
     <>
       <Navbar />
@@ -39,7 +60,7 @@ export default function Booking() {
             </p>
           </div>
 
-          <BookingTable bookings={getBookingHistoryRows()} />
+          <BookingTable bookings={bookings} />
         </div>
       </main>
     </>

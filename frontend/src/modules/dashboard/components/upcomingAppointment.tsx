@@ -1,4 +1,4 @@
-import { BookingHistoryRow } from "@/src/lib/dummy";
+import { BookingHistoryRow } from "@/src/lib/types";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import Image from "next/image";
 
@@ -10,10 +10,10 @@ export default function UpcomingAppointment({ appointment }: Props) {
   if (!appointment) {
     return (
       <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-800 mb-4">Upcoming Appointment</h2>
+        <h2 className="text-lg font-semibold text-slate-800 mb-4">Jadwal Yang Akan Datang</h2>
         <div className="flex flex-col items-center justify-center py-8 text-slate-400">
           <Calendar className="w-12 h-12 mb-2 opacity-20" />
-          <p>No upcoming appointments found.</p>
+          <p>Tidak ada jadwal yang akan datang.</p>
         </div>
       </div>
     );
@@ -21,7 +21,7 @@ export default function UpcomingAppointment({ appointment }: Props) {
 
   return (
     <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm">
-      <h2 className="text-lg font-semibold text-slate-800 mb-4">Upcoming Appointment</h2>
+      <h2 className="text-lg font-semibold text-slate-800 mb-4">Jadwal Yang Akan Datang</h2>
       
       <div className="flex items-start gap-4">
         <div className="relative w-16 h-16 rounded-full overflow-hidden shrink-0 bg-slate-100 border border-slate-100">
@@ -40,8 +40,8 @@ export default function UpcomingAppointment({ appointment }: Props) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="flex items-center gap-2 text-sm text-slate-600">
               <Calendar className="w-4 h-4 text-slate-400" />
-              <span>{new Date(appointment.appointmentDate).toLocaleDateString('en-US', { 
-                weekday: 'short', 
+              <span>{new Date(appointment.appointmentDate).toLocaleDateString('id-ID', { 
+                weekday: 'long', 
                 year: 'numeric', 
                 month: 'short', 
                 day: 'numeric' 
@@ -49,11 +49,11 @@ export default function UpcomingAppointment({ appointment }: Props) {
             </div>
             <div className="flex items-center gap-2 text-sm text-slate-600">
               <Clock className="w-4 h-4 text-slate-400" />
-              <span>{appointment.appointmentTime} - {appointment.appointmentEndTime}</span>
+              <span>{appointment.appointmentStartTime} - {appointment.appointmentEndTime}</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-slate-600 md:col-span-2">
               <MapPin className="w-4 h-4 text-slate-400" />
-              <span className="truncate">{appointment.location}</span>
+              <span className="truncate">{appointment.location} - Ruangan {appointment.room}</span>
             </div>
           </div>
         </div>

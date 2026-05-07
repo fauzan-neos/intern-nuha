@@ -9,7 +9,7 @@ export default function BookingDetailHeader() {
         className="inline-flex items-center gap-2 text-sm font-semibold text-teal-700"
       >
         <ArrowLeft className="size-4" />
-        Back to My Bookings
+        Kembali ke Daftar Booking
       </Link>
 
       <button

@@ -67,7 +67,7 @@ export default function RegisterForm() {
               <label className="text-sm font-medium text-gray-700">Nama Lengkap</label>
               <input
               type="text"
-              placeholder="e.g John Doe"
+              placeholder="Masukkan nama lengkap Anda"
               className="text-black placeholder:text-gray-400 mt-1 w-full border px-3 py-2 rounded-md border-black bg-black/10"
               {...register("fullname")}
               />

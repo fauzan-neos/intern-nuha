@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { BadgeCheck } from "lucide-react";
-import { BookingHistoryRow } from "@/src/lib/dummy";
+import { BookingHistoryRow } from "@/src/lib/types";
 
 type Props = {
   booking: BookingHistoryRow;

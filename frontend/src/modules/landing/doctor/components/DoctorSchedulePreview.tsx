@@ -1,13 +1,13 @@
 import { Clock3 } from "lucide-react";
-import { UpcomingScheduleItem } from "@/src/lib/dummy";
+import { ScheduleStatus, UpcomingScheduleItem } from "@/src/lib/types";
 
 type Props = {
   upcomingSchedule: UpcomingScheduleItem[];
 };
 
 function getScheduleTextColor(status: UpcomingScheduleItem["status"]) {
-  if (status === "available") return "text-gray-700";
-  if (status === "blocked") return "text-gray-500";
+  if (status === ("AVAILABLE" as ScheduleStatus)) return "text-gray-700";
+  if (status === ("BLOCKED" as ScheduleStatus)) return "text-gray-500";
   return "text-gray-400";
 }
 

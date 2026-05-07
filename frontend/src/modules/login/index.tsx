@@ -51,7 +51,7 @@ export default function LoginForm() {
                 <div className="space-y-4 w-2/3 align-items-center mx-auto">
                     <div className="flex items-center gap-2">
                         <Image src="/MedCareLogoGreen.png" alt="logo" width={40} height={40} />
-                        <span className=" font-bold text-xl mx-1 bg-gradient-to-r bg-clip-text text-transparent from-teal-600 to-teal-700">
+                        <span className=" font-bold text-xl mx-1 bg-linear-to-r bg-clip-text text-transparent from-teal-600 to-teal-700">
                             MedCare
                         </span>
                     </div>
@@ -93,7 +93,7 @@ export default function LoginForm() {
 
                         <p className="text-sm text-center text-gray-500">
                             Belum punya akun?
-                            <Link href="/register" className="text-teal-600 font-medium">
+                            <Link href="/register" className="text-teal-600 font-medium mx-1">
                             Daftar sekarang
                             </Link>
                         </p>

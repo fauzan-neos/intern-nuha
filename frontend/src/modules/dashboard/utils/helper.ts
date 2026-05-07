@@ -1,44 +1,28 @@
-import { getBookingHistoryRows, hospitalUpdates, quickAccess } from "@/src/lib/dummy";
+import { BookingHistoryRow } from "@/src/lib/types";
 
-export function getUpcomingAppointment(patientId: number) {
+export function getUpcomingAppointment(bookings: BookingHistoryRow[], patientId: number) {
   const now = new Date();
-  console.log("DATA:", getBookingHistoryRows());
-  return getBookingHistoryRows()
+  console.log("DATA:", bookings);
+  return bookings
     .filter(
       (b) =>
         b.patientId === patientId &&
-        b.status === "confirmed" &&
-        new Date(b.appointmentDate + "T" + b.appointmentTime) >= now
+        b.bookingStatus === "BOOKED" &&
+        new Date(b.appointmentDate + "T" + b.appointmentStartTime) >= now
     )
     .sort(
       (a, b) =>
-        new Date(a.appointmentDate + "T" + a.appointmentTime).getTime() -
-        new Date(b.appointmentDate + "T" + b.appointmentTime).getTime()
+        new Date(a.appointmentDate + "T" + a.appointmentStartTime).getTime() -
+        new Date(b.appointmentDate + "T" + b.appointmentStartTime).getTime()
     )[0];
 }
 
-export function getActiveAppointmentsCount(patientId: number) {
+export function getActiveAppointmentsCount(bookings: BookingHistoryRow[],patientId: number) {
   const now = new Date();
-  return getBookingHistoryRows().filter(
+  return bookings.filter(
     (b) => 
       b.patientId === patientId && 
-      b.status === "confirmed" &&
-      new Date(b.appointmentDate + "T" + b.appointmentTime) >= now
+      b.bookingStatus === "BOOKED" &&
+      new Date(b.appointmentDate + "T" + b.appointmentStartTime) >= now
   ).length;
-}
-
-// console.log(getBookingHistoryRows());
-// console.log(getUpcomingAppointment(1));
-// console.log(getActiveAppointmentsCount(1));
-
-export function getDashboardData(patientId: number, userName: string = "Patient") {
-  return {
-    user: { name: userName },
-    upcomingAppointment: getUpcomingAppointment(patientId),
-    stats: {
-      activeAppointments: getActiveAppointmentsCount(patientId),
-    },
-    quickAccess: quickAccess,
-    updates: hospitalUpdates,
-  };
 }
