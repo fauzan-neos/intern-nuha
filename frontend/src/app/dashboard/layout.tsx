@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import "../globals.css";
 import { fetchUser } from "@/src/lib/api";
 import { useRouter } from "next/navigation";
+import { LOGIN_PAGE_URL } from "@/src/constants/constants";
 
 
 
@@ -26,7 +27,7 @@ export default function DashboardLayout({
         await fetchUser();
       } catch (error) {
         console.error("Error fetching user data:", error);
-        router.push("/login");
+        router.push(LOGIN_PAGE_URL);
       }
 
     };

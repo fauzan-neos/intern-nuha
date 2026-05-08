@@ -201,9 +201,13 @@ export type AppointmentSlot = {
   remaining: number;
 };
 
+export type AppointmentSession = {
+  sessionName: "Sesi Pagi" | "Sesi Sore";
+  timeRange: string;
+  slots: AppointmentSlot[];
+  totalRemaining: number;
+  startTime: string; // Waktu awal sesi untuk disimpan di DB
+  endTime: string; // Waktu akhir sesi
+};
 
-export function getTopDoctors(items: Doctor[]) {
-  return [...items]
-    .sort((a, b) => b.weeklyBooking - a.weeklyBooking)
-    .slice(0, 3);
-}
+

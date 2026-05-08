@@ -1,4 +1,4 @@
-import Doctor from "@/src/modules/landing/doctor"
+import Doctor from "@/src/modules/doctor"
 import { Suspense } from "react";
 
 export default function DoctorPage() {

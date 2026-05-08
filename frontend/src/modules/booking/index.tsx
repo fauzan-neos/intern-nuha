@@ -3,11 +3,12 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import Navbar from "@/src/modules/components/navbar";
+import Navbar from "../../components/navbar";
 import { useAuthUser } from "@/src/modules/auth/hooks/useAuthUser";
 import BookingTable from "./components/BookingTable";
 import { fetchMyBookings, fetchDoctors } from "@/src/lib/api";
-import { formatBookingHistoryRows } from "@/src/utils/doctorHelper";
+import { formatBookingHistoryRows } from "@/src/utils/bookingHelper";
+import { LOGIN_PAGE_URL } from "@/src/constants/constants";
 
 export default function Booking() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function Booking() {
 
   useEffect(() => {
     if (isError) {
-      router.push("/login");
+      router.push(LOGIN_PAGE_URL);
     }
   }, [isError, router]);
 

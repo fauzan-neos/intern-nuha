@@ -8,9 +8,10 @@ import { Doctor } from "@/src/lib/types";
 import {
   BookingFormValues,
   bookingSchema,
-} from "@/src/modules/landing/doctor/utils/validation";
+} from "@/src/modules/doctor/utils/validation";
 import AppointmentSlotPicker from "./AppointmentSlotPicker";
-import { getAvailableDates, groupSlotsIntoSessions } from "@/src/utils/doctorHelper";
+import { groupSlotsIntoSessions } from "@/src/utils/appointmentHelper";
+import { getAvailableDates } from "@/src/utils/scheduleHelper";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { fetchAvailableSlots, createBooking } from "@/src/lib/api";
 import toast from "react-hot-toast";

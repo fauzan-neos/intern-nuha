@@ -10,8 +10,10 @@ import AvailabilityBadge, { getAvailabilityLabel } from "./AvailabilityBadge";
 import BookingModal from "./booking/BookingModal";
 import DoctorSchedulePreview from "./DoctorSchedulePreview";
 import { useAuthUser } from "@/src/modules/auth/hooks/useAuthUser";
-import { getUpcomingSchedule, getAppointmentSlots } from "@/src/utils/doctorHelper";
+import { getAppointmentSlots } from "@/src/utils/appointmentHelper";
+import { getUpcomingSchedule } from "@/src/utils/scheduleHelper";
 import { ScheduleStatus } from "@/src/lib/types";
+import { LOGIN_PAGE_URL } from "@/src/constants/constants";
 
 type Props = {
   doctor: Doctor;
@@ -44,7 +46,7 @@ export default function DoctorCard({ doctor }: Props) {
     if(!hasAnyAvailableSlot) return;
 
     if(!user) {
-      router.push("/login");
+      router.push(LOGIN_PAGE_URL);
       return;
     }
 

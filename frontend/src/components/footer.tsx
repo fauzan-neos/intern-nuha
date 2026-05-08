@@ -1,6 +1,6 @@
 export default function Footer() {
     return (
-    <footer className="bg-gradient-to-r from-teal-700 to-teal-800 text-white px-10 py-16">
+    <footer className="bg-linear-to-r from-teal-700 to-teal-800 text-white px-10 py-16">
       
       {/* TOP */}
       <div className="grid md:grid-cols-3 gap-10">

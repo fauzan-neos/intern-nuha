@@ -6,14 +6,13 @@ import { logout } from "@/src/lib/api";
 import { authUserQueryKey } from "./useAuthUser";
 
 type Options = {
-  redirectTo?: string;
   onSuccess?: () => void;
 };
 
 export function useLogout(options: Options = {}) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const redirectTo = options.redirectTo ?? "/";
+  const redirectTo =  "/";
 
   return useMutation({
     mutationFn: logout,

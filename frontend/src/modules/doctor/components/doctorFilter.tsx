@@ -1,7 +1,5 @@
 "use client";
 
-import { Specialization } from "@/src/lib/types";
-
 type Props = {
   search: string;
   setSearch: (val: string) => void;
@@ -22,11 +20,6 @@ export default function DoctorFilter({ search, setSearch }: Props) {
         onChange={(e) => setSearch(e.target.value)}
         className="flex-1 border px-4 py-2 rounded-md outline-1 text-gray-600"
       />
-
-      {/* FILTER BUTTON
-      <button className="bg-teal-600 text-white px-4 rounded-md">
-        Apply
-      </button> */}
     </div>
   );
 }

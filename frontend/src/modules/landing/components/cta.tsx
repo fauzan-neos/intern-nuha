@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { REGISTER_PAGE_URL } from "@/src/constants/constants";
 
 export default function CTA() {
   return (
@@ -12,7 +13,7 @@ export default function CTA() {
             Akses catatan rekam medis, booking dokter terbaik, dan lainnya.
           </p>
             <div className="mt-4 flex gap-4">
-                <Link href={"/register"} className="bg-white text-teal-700 px-4 py-2 rounded-md">
+                <Link href={REGISTER_PAGE_URL} className="bg-white text-teal-700 px-4 py-2 rounded-md">
                     Daftar sekarang
                 </Link>
             </div>

@@ -1,10 +1,11 @@
+import { AUTH, BOOKING, DOCTORS, HOSPITAL_UPDATES, LOGOUT, SPECIALIZATIONS, REGISTER, LOGIN } from "../constants/constants";
 import { Doctor, Specialization, Booking, HospitalUpdate, CreateBookingPayload } from "./types";
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // AUTH
 export async function fetchUser() {
-    const res = await fetch(`${API_URL}/me`, {
+    const res = await fetch(`${API_URL}${AUTH}`, {
         credentials: "include",
     })
     const data = await res.json()
@@ -13,7 +14,7 @@ export async function fetchUser() {
 }
 
 export async function logout() {
-    const res = await fetch(`${API_URL}/logout`, {
+    const res = await fetch(`${API_URL}${LOGOUT}`, {
         method: "POST",
         credentials: "include",
     });
@@ -23,7 +24,7 @@ export async function logout() {
 }
 
 export async function createUser(fullname: string, email: string, password: string) {
-    const res = await fetch(`${API_URL}/register`, {
+    const res = await fetch(`${API_URL}${REGISTER}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ fullname, email, password }),
@@ -35,7 +36,7 @@ export async function createUser(fullname: string, email: string, password: stri
 }
 
 export async function loginUser(email: string, password: string) {
-    const res = await fetch(`${API_URL}/login`, {
+    const res = await fetch(`${API_URL}${LOGIN}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -48,14 +49,14 @@ export async function loginUser(email: string, password: string) {
 
 // DOCTORS & SPECIALIZATIONS
 export async function fetchDoctors(): Promise<Doctor[]> {
-    const res = await fetch(`${API_URL}/api/doctors`);
+    const res = await fetch(`${API_URL}${DOCTORS}`);
     const data = await res.json();
     if(!res.ok) throw new Error(data.message);
     return data.data
 }
 
 export async function fetchSpecializations(): Promise<Specialization[]> {
-    const res = await fetch(`${API_URL}/api/specializations`);
+    const res = await fetch(`${API_URL}${SPECIALIZATIONS}`);
     const data = await res.json();
     if(!res.ok) throw new Error(data.message);
     return data.data
@@ -63,7 +64,7 @@ export async function fetchSpecializations(): Promise<Specialization[]> {
 
 // BOOKINGS
 export async function createBooking(bookingData: CreateBookingPayload) {
-    const res = await fetch(`${API_URL}/api/bookings`, {
+    const res = await fetch(`${API_URL}${BOOKING}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bookingData),
@@ -75,7 +76,7 @@ export async function createBooking(bookingData: CreateBookingPayload) {
 }
 
 export async function fetchMyBookings(): Promise<Booking[]> {
-    const res = await fetch(`${API_URL}/api/bookings/me`, {
+    const res = await fetch(`${API_URL}${BOOKING}${AUTH}`, {
         credentials: "include",
     });
     const data = await res.json();
@@ -84,7 +85,7 @@ export async function fetchMyBookings(): Promise<Booking[]> {
 }
 
 export async function fetchBookingDetail(uuid: string): Promise<Booking> {
-    const res = await fetch(`${API_URL}/api/bookings/${uuid}`, {
+    const res = await fetch(`${API_URL}${BOOKING}/${uuid}`, {
         credentials: "include",
     });
     const data = await res.json();
@@ -93,7 +94,7 @@ export async function fetchBookingDetail(uuid: string): Promise<Booking> {
 }
 
 export async function cancelBooking(uuid: string) {
-    const res = await fetch(`${API_URL}/api/bookings/${uuid}/cancel`, {
+    const res = await fetch(`${API_URL}${BOOKING}/${uuid}/cancel`, {
         method: "PATCH",
         credentials: "include",
     });
@@ -103,7 +104,7 @@ export async function cancelBooking(uuid: string) {
 }
 
 export async function fetchAvailableSlots(doctorId: number, date: string, scheduleId: number) {
-    const res = await fetch(`${API_URL}/api/bookings/slots?doctorId=${doctorId}&date=${date}&scheduleId=${scheduleId}`, {
+    const res = await fetch(`${API_URL}${BOOKING}/slots?doctorId=${doctorId}&date=${date}&scheduleId=${scheduleId}`, {
         credentials: "include",
     });
     const data = await res.json();
@@ -113,7 +114,7 @@ export async function fetchAvailableSlots(doctorId: number, date: string, schedu
 
 // HOSPITAL UPDATES
 export async function fetchHospitalUpdates(): Promise<HospitalUpdate[]> {
-    const res = await fetch(`${API_URL}/api/hospital-updates`);
+    const res = await fetch(`${API_URL}${HOSPITAL_UPDATES}`);
     const data = await res.json();
     if (!res.ok) throw new Error(data.message);
     return data.data;

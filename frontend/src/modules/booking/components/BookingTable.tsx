@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BookingHistoryRow } from "@/src/lib/types";
 import BookingStatusBadge from "./BookingStatusBadge";
+import { BOOKING_PAGE_URL } from "@/src/constants/constants";
 
 type Props = {
   bookings: BookingHistoryRow[];
@@ -43,7 +44,7 @@ export default function BookingTable({ bookings }: Props) {
             <BookingStatusBadge status={booking.bookingStatus} />
           </span>
           <Link
-            href={`/booking/${booking.uuid}`}
+            href={`${BOOKING_PAGE_URL}/${booking.uuid}`}
             className="font-semibold text-teal-700 hover:text-teal-900"
           >
             Lihat detail booking

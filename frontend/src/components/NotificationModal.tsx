@@ -33,7 +33,7 @@ export default function NotificationModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 px-4">
+    <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/50 px-4">
       <div className="w-full max-w-md animate-in fade-in zoom-in duration-200 rounded-xl bg-white p-6 shadow-2xl">
         {showCloseButton && (
           <div className="flex justify-end">

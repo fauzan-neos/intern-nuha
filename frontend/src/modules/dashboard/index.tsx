@@ -1,16 +1,16 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import Navbar from "./../components/navbar";
+import Navbar from "../../components/navbar";
 import UpcomingAppointment from "./components/upcomingAppointment";
 import Stats from "./components/stats";
 import QuickAccess from "./components/quickAcces";
 import HospitalUpdates from "./components/hospitalUpdates";
 import { useAuthUser } from "../auth/hooks/useAuthUser";
-import Footer from "./../components/footer";
+import Footer from "../../components/footer";
 import { fetchMyBookings, fetchHospitalUpdates, fetchDoctors } from "@/src/lib/api";
-import { quickAccess } from "@/src/lib/constants";
-import { formatBookingHistoryRows } from "@/src/utils/doctorHelper";
+import { quickAccess } from "../../constants/constants";
+import { formatBookingHistoryRows } from "@/src/utils/bookingHelper";
 
 export default function HomePage() {
   const { data: user, isLoading: userLoading } = useAuthUser();

@@ -3,9 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { getTopDoctors } from "@/src/lib/types";
+import { getTopDoctors } from "../utils/helper";
 import { fetchDoctors } from "@/src/lib/api";
-import { getUpcomingSchedule } from "@/src/utils/doctorHelper";
+import { getUpcomingSchedule } from "@/src/utils/scheduleHelper";
+import { LOGIN_PAGE_URL } from "@/src/constants/constants";
 
 export default function DoctorAvailability() {
   const { data: doctorsData, isLoading } = useQuery({
@@ -87,7 +88,7 @@ export default function DoctorAvailability() {
 
               {/* ACTION */}
               <div className="text-right pr-2">
-                <Link href={"/login"} className="text-teal-700 font-bold hover:text-teal-800 text-sm">
+                <Link href={LOGIN_PAGE_URL} className="text-teal-700 font-bold hover:text-teal-800 text-sm">
                   Booking
                 </Link>
               </div>

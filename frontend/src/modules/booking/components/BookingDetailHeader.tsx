@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, Download, XCircle } from "lucide-react";
+import { BOOKING_PAGE_URL } from "@/src/constants/constants";
 
 type Props = {
   status?: string;
@@ -13,7 +14,7 @@ export default function BookingDetailHeader({ status, onCancel, isCancelling }: 
   return (
     <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <Link
-        href="/booking"
+        href={BOOKING_PAGE_URL}
         className="inline-flex items-center gap-2 text-sm font-semibold text-teal-700"
       >
         <ArrowLeft className="size-4" />

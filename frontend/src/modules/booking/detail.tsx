@@ -10,9 +10,10 @@ import BookingDetailSummary from "./components/BookingDetailSummary";
 import BookingInfoCard from "./components/BookingInfoCard";
 import PreAppointmentInstructions from "./components/PreAppointmentInstructions";
 import { fetchBookingDetail, fetchDoctors, cancelBooking } from "@/src/lib/api";
-import { formatBookingHistoryRows } from "@/src/utils/doctorHelper";
+import { formatBookingHistoryRows } from "@/src/utils/bookingHelper";
 import { useState } from "react";
-import NotificationModal from "../components/NotificationModal";
+import NotificationModal from "../../components/NotificationModal";
+import { BOOKING_PAGE_URL } from "@/src/constants/constants";
 
 export default function BookingDetail() {
   const params = useParams<{ bookingCode: string }>();
@@ -48,7 +49,7 @@ export default function BookingDetail() {
         message: "Janji temu Anda telah berhasil dibatalkan.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       setShowConfirmCancel(false);
       setModal({
         isOpen: true,
@@ -85,7 +86,7 @@ export default function BookingDetail() {
       <main className="min-h-screen bg-slate-50 px-6 py-10 text-gray-900">
         <div className="mx-auto max-w-6xl space-y-6">
           <Link
-            href="/booking"
+            href={BOOKING_PAGE_URL}
             className="inline-flex items-center gap-2 text-sm font-semibold text-teal-700"
           >
             <ArrowLeft className="size-4" />
@@ -114,7 +115,7 @@ export default function BookingDetail() {
 
       {/* Confirmation Modal for Cancellation */}
       {showConfirmCancel && (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/50 px-4">
+        <div className="fixed inset-0 z-110 flex items-center justify-center bg-black/50 px-4">
           <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
             <div className="text-center">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
@@ -147,7 +148,7 @@ export default function BookingDetail() {
 
       <div className="mx-auto max-w-6xl px-6 py-8">
         <BookingDetailHeader 
-          status={booking.status} 
+          status={booking.bookingStatus} 
           onCancel={handleCancel}
           isCancelling={cancelMutation.isPending}
         />

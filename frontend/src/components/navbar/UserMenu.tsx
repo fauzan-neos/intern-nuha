@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AuthUser } from "@/src/modules/auth/hooks/useAuthUser";
 import { useLogout } from "@/src/modules/auth/hooks/useLogout";
 import NotificationModal from "../NotificationModal";
+import { DASHBOARD_PAGE_URL } from "@/src/constants/constants";
 
 type Props = {
   user?: AuthUser;
@@ -16,7 +17,6 @@ export default function UserMenu({ user }: Props) {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   
   const logoutMutation = useLogout({
-    redirectTo: "/",
     onSuccess: () => {
       setIsDropdownOpen(false);
     },
@@ -77,7 +77,7 @@ export default function UserMenu({ user }: Props) {
           className="absolute right-0 mt-3 w-44 rounded-md border border-gray-200 bg-white py-2 text-sm text-gray-700 shadow-lg"
         >
           <Link
-            href="/dashboard"
+            href={DASHBOARD_PAGE_URL}
             role="menuitem"
             className="block px-4 py-2 hover:bg-gray-100"
           >

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { LOGIN_PAGE_URL } from "@/src/constants/constants";
 
 export default function HeroSection() {
   return (
@@ -17,7 +18,7 @@ export default function HeroSection() {
       />
 
       {/* OVERLAY */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/50" />
+      <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/60 to-black/50" />
 
       {/* CONTENT */}
       <div className="relative z-10 max-w-6xl mx-auto px-6">
@@ -32,7 +33,7 @@ export default function HeroSection() {
         </p>
 
         <div className="flex gap-4">
-          <Link href={"/login"} className="bg-teal-700 text-white px-6 py-3 rounded-lg">
+          <Link href={LOGIN_PAGE_URL} className="bg-teal-700 text-white px-6 py-3 rounded-lg">
             Booking Sekarang
           </Link>
 

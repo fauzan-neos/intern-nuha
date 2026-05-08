@@ -1,6 +1,6 @@
 "use client";
 
-import DoctorCard from "@/src/modules/landing/doctor/components/doctorCard";
+import DoctorCard from "@/src/modules/doctor/components/doctorCard";
 import { useQuery } from "@tanstack/react-query";
 import { fetchDoctors } from "@/src/lib/api";
 

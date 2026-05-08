@@ -9,7 +9,8 @@ import { useRegister } from "./hooks/useRegister";
 import * as z from "zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import NotificationModal from "../components/NotificationModal";
+import NotificationModal from "../../../components/NotificationModal";
+import { LOGIN_PAGE_URL } from "@/src/constants/constants";
 
 type FormValues = z.infer<typeof RegisterSchema>;
 
@@ -38,7 +39,7 @@ export default function RegisterForm() {
                 message: res.message || "Akun Anda telah berhasil dibuat. Silakan masuk.",
             });
             setTimeout(() => {
-                router.push("/login");
+                router.push(LOGIN_PAGE_URL);
             }, 2000);
         },
         onError: (err) => {
@@ -156,7 +157,7 @@ export default function RegisterForm() {
 
             <p className="text-sm text-center text-gray-500">
               Sudah punya akun?{" "}
-              <Link href="/login" className="text-teal-600 font-medium">
+              <Link href={LOGIN_PAGE_URL} className="text-teal-600 font-medium">
                 Masuk sekarang
               </Link>
             </p>

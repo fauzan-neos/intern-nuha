@@ -1,7 +1,7 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { AppointmentSlot } from "@/src/lib/types";
-import { BookingFormValues } from "@/src/modules/landing/doctor/utils/validation";
-import { groupSlotsIntoSessions } from "@/src/utils/doctorHelper";
+import { BookingFormValues } from "@/src/modules/doctor/utils/validation";
+import { groupSlotsIntoSessions } from "@/src/utils/appointmentHelper";
 
 type Props = {
   slots: AppointmentSlot[];

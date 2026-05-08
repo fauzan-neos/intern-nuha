@@ -13,6 +13,7 @@ import {
   publicNavItems,
 } from "./navbar/navItems";
 import { useNavbarScroll } from "./navbar/useNavbarScroll";
+import { LOGIN_PAGE_URL } from "../constants/constants";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -89,7 +90,7 @@ export default function Navbar() {
             <UserMenu user={user} />
           ) : (
             <Link
-              href="/login"
+              href={LOGIN_PAGE_URL}
               className="ml-4 rounded-md bg-white/90 px-4 py-1 text-black"
             >
               Login

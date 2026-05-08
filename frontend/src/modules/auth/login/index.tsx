@@ -9,7 +9,8 @@ import { loginSchema } from "./utils/validation";
 import { useLogin } from "./hooks/useLogin";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import NotificationModal from "../components/NotificationModal";
+import NotificationModal from "../../../components/NotificationModal";
+import { DASHBOARD_PAGE_URL, REGISTER_PAGE_URL } from "@/src/constants/constants";
 
 type FormValues = z.infer<typeof loginSchema> 
 
@@ -38,7 +39,7 @@ export default function LoginForm() {
                 message: res.data.message || "Selamat datang kembali!",
             });
             setTimeout(() => {
-                router.push("/dashboard");
+                router.push(DASHBOARD_PAGE_URL);
             }, 2000);
         },
         onError: (err) => {
@@ -132,7 +133,7 @@ export default function LoginForm() {
 
                         <p className="text-sm text-center text-gray-500">
                             Belum punya akun?
-                            <Link href="/register" className="text-teal-600 font-medium mx-1">
+                            <Link href={REGISTER_PAGE_URL} className="text-teal-600 font-medium mx-1">
                             Daftar sekarang
                             </Link>
                         </p>
