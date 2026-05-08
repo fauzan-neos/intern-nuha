@@ -78,7 +78,7 @@ export function getUpcomingSchedule(
     scheduleItems.push({
       date: formatDateValue(date),
       day: dayName,
-      dayLabel: currentOffset === 0 ? "Hari Ini" : date.toLocaleDateString("id-ID", { weekday: "short", day: "numeric", month: "short" }),
+      dayLabel: currentOffset === 0 ? "Hari Ini" : date.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "short" }),
       timeLabel: hasTime
         ? formatTimeRange(schedule.start!, schedule.end!)
         : (schedule?.note ?? "Tidak ada jadwal"),
@@ -173,7 +173,7 @@ export type AppointmentSession = {
   slots: AppointmentSlot[];
   totalRemaining: number;
   startTime: string; // Waktu awal sesi untuk disimpan di DB
-  endTime?: string; // Opsional, bisa dihitung dari slot terakhir jika diperlukan
+  endTime: string; // Waktu akhir sesi
 };
 
 export function groupSlotsIntoSessions(slots: AppointmentSlot[]): AppointmentSession[] {
@@ -183,23 +183,26 @@ export function groupSlotsIntoSessions(slots: AppointmentSlot[]): AppointmentSes
   const sessions: AppointmentSession[] = [];
 
   if (pagiSlots.length > 0) {
+    const lastPagiSlot = pagiSlots[pagiSlots.length - 1];
     sessions.push({
       sessionName: "Sesi Pagi",
-      timeRange: `${pagiSlots[0].start} - 12:00`,
+      timeRange: `${pagiSlots[0].start} - ${lastPagiSlot.end}`,
       slots: pagiSlots,
       totalRemaining: pagiSlots.reduce((acc, curr) => acc + curr.remaining, 0),
-      startTime: pagiSlots[0].start
+      startTime: pagiSlots[0].start,
+      endTime: lastPagiSlot.end
     });
   }
 
   if (soreSlots.length > 0) {
-    const lastSlot = soreSlots[soreSlots.length - 1];
+    const lastSoreSlot = soreSlots[soreSlots.length - 1];
     sessions.push({
       sessionName: "Sesi Sore",
-      timeRange: `${soreSlots[0].start} - ${lastSlot.end || (parseInt(lastSlot.start) + 1).toString().padStart(2, "0") + ":00"}`,
+      timeRange: `${soreSlots[0].start} - ${lastSoreSlot.end}`,
       slots: soreSlots,
       totalRemaining: soreSlots.reduce((acc, curr) => acc + curr.remaining, 0),
-      startTime: soreSlots[0].start
+      startTime: soreSlots[0].start,
+      endTime: lastSoreSlot.end
     });
   }
 
@@ -216,6 +219,7 @@ export function formatBookingHistoryRows(
     
     return {
       ...booking,
+      status: booking.bookingStatus,
       doctorName: doctor?.name ?? "Unknown Doctor",
       doctorImage: doctor?.image ?? "/doc_sarah.jpg",
       specialization: doctor?.specialization?.name ?? "General Medicine",

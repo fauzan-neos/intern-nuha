@@ -96,7 +96,6 @@ export default function DoctorCard({ doctor }: Props) {
       {isModalOpen && (
         <BookingModal
           doctor={doctor}
-          appointmentSlots={getAppointmentSlots(doctor)} // Default slots (today)
           onClose={() => setIsModalOpen(false)}
         />
       )}

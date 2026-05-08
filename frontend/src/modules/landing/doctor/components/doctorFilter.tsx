@@ -1,13 +1,18 @@
 "use client";
 
+import { Specialization } from "@/src/lib/types";
+
 type Props = {
   search: string;
   setSearch: (val: string) => void;
 };
 
+
 export default function DoctorFilter({ search, setSearch }: Props) {
+
+
   return (
-    <div className="flex gap-4 mt-6 w-3/4">
+    <div className="flex gap-4 mt-4 w-3/4">
       
       {/* SEARCH */}
       <input

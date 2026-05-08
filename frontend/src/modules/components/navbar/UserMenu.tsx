@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AuthUser } from "@/src/modules/auth/hooks/useAuthUser";
 import { useLogout } from "@/src/modules/auth/hooks/useLogout";
+import NotificationModal from "../NotificationModal";
 
 type Props = {
   user?: AuthUser;
@@ -11,10 +12,14 @@ type Props = {
 
 export default function UserMenu({ user }: Props) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  
   const logoutMutation = useLogout({
     redirectTo: "/",
-    onSuccess: () => setIsDropdownOpen(false),
+    onSuccess: () => {
+      setIsDropdownOpen(false);
+    },
   });
 
   const getUserInitial = () => {
@@ -25,6 +30,9 @@ export default function UserMenu({ user }: Props) {
 
   const handleLogout = () => {
     if (logoutMutation.isPending) return;
+    setShowLogoutModal(true);
+    // Give time for modal to show before starting mutation if needed, 
+    // but mutation starts immediately and we show modal during isPending
     logoutMutation.mutate();
   };
 
@@ -44,6 +52,15 @@ export default function UserMenu({ user }: Props) {
 
   return (
     <div ref={dropdownRef} className="relative ml-4">
+      <NotificationModal
+        isOpen={showLogoutModal || logoutMutation.isPending}
+        onClose={() => setShowLogoutModal(false)}
+        type="loading"
+        title="Sedang Keluar"
+        message="Mohon tunggu sebentar, kami sedang mengakhiri sesi Anda."
+        showCloseButton={false}
+      />
+      
       <button
         type="button"
         onClick={() => setIsDropdownOpen((value) => !value)}

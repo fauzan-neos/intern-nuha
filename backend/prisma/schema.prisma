@@ -177,6 +177,7 @@ enum BookingStatus {
   BOOKED
   REGISTERED
   COMPLETED
+  CANCELED
 }
 
 model HospitalUpdate {

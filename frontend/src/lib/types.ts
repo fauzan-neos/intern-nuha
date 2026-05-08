@@ -4,7 +4,7 @@ export type Weekday = "SUN" | "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT";
 
 export type ScheduleStatus = "AVAILABLE" | "BLOCKED" | "OFF";
 
-export type BookingStatus = "BOOKED" | "REGISTERED" | "COMPLETED";
+export type BookingStatus = "BOOKED" | "REGISTERED" | "COMPLETED" | "CANCELED";
 
 export interface User {
   id: number;

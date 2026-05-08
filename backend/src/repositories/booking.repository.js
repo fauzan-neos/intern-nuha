@@ -23,6 +23,12 @@ async function createBooking(data) {
     });
 }
 
+async function countBookingsBySchedule(scheduleId, appointmentDate, appointmentStartTime) {
+    return await prisma.booking.count({
+        where: { scheduleId: scheduleId, appointmentDate: appointmentDate, appointmentStartTime: appointmentStartTime }
+    })
+};
+
 async function getBookingsByUserId(userId) {
     return await prisma.booking.findMany({
         where: { userId: userId },
@@ -40,9 +46,9 @@ async function getBookingsByUserId(userId) {
     });
 }
 
-async function getBookingByCode(bookingCode) {
+async function getBookingByUuid(uuid) {
     return await prisma.booking.findUnique({
-        where: { bookingCode: bookingCode },
+        where: { uuid: uuid },
         include: {
             doctor: {
                 include: {
@@ -55,22 +61,17 @@ async function getBookingByCode(bookingCode) {
     });
 }
 
-async function countBookingsBySchedule(scheduleId, date, time) {
-    return await prisma.booking.count({
-        where: {
-            scheduleId: scheduleId,
-            appointmentDate: date,
-            appointmentStartTime: time,
-            bookingStatus: {
-                not: "COMPLETED" // Sesuaikan jika ada status cancelled
-            }
-        }
+async function updateBookingStatus(uuid, status) {
+    return await prisma.booking.update({
+        where: { uuid: uuid },
+        data: { bookingStatus: status }
     });
 }
 
 module.exports = {
     createBooking,
     getBookingsByUserId,
-    getBookingByCode,
-    countBookingsBySchedule
+    getBookingByUuid,
+    countBookingsBySchedule,
+    updateBookingStatus
 };

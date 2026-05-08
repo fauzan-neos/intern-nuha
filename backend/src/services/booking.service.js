@@ -54,15 +54,24 @@ async function createBookingService(userId, bookingData) {
         where: { id: bookingData.doctorId }
     });
 
-    // Hitung urutan total untuk hari itu agar kode JT-001 tetap unik per hari
-    const dailyTotal = await prisma.booking.count({
+    // Cari booking terakhir untuk hari itu untuk menentukan sequence berikutnya
+    const lastBooking = await prisma.booking.findFirst({
         where: {
             doctorId: bookingData.doctorId,
             appointmentDate: bookingData.appointmentDate
+        },
+        orderBy: {
+            bookingCode: 'desc'
         }
     });
 
-    const sequence = dailyTotal + 1;
+    let sequence = 1;
+    if (lastBooking) {
+        const lastCode = lastBooking.bookingCode;
+        const lastSequence = parseInt(lastCode.split('-').pop());
+        sequence = lastSequence + 1;
+    }
+
     const paddedSequence = sequence.toString().padStart(3, '0');
     const bookingCode = `${doctor.employeeCode}-${paddedSequence}`;
 
@@ -78,12 +87,33 @@ async function getMyBookingsService(userId) {
     return await bookingRepository.getBookingsByUserId(userId);
 }
 
-async function getBookingDetailService(bookingCode) {
-    const booking = await bookingRepository.getBookingByCode(bookingCode);
+async function getBookingDetailService(uuid) {
+    const booking = await bookingRepository.getBookingByUuid(uuid);
     if (!booking) {
         throw new Error("Data booking tidak ditemukan");
     }
     return booking;
+}
+
+async function cancelBookingService(uuid, userId) {
+    const booking = await bookingRepository.getBookingByUuid(uuid);
+    if (!booking) {
+        throw new Error("Data booking tidak ditemukan");
+    }
+
+    if (booking.userId !== userId) {
+        throw new Error("Anda tidak memiliki akses untuk membatalkan booking ini");
+    }
+
+    if (booking.bookingStatus === "CANCELED") {
+        throw new Error("Booking sudah dibatalkan sebelumnya");
+    }
+
+    if (booking.bookingStatus === "COMPLETED") {
+        throw new Error("Booking yang sudah selesai tidak dapat dibatalkan");
+    }
+
+    return await bookingRepository.updateBookingStatus(uuid, "CANCELED");
 }
 
 async function generateAvailableSlots(doctorId, date, scheduleId) {
@@ -156,5 +186,6 @@ module.exports = {
     generateAvailableSlots,
     createBookingService,
     getMyBookingsService,
-    getBookingDetailService
+    getBookingDetailService,
+    cancelBookingService
 };

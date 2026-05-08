@@ -2,18 +2,28 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { ArrowLeft, XCircle } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import BookingDetailDoctorCard from "./components/BookingDetailDoctorCard";
 import BookingDetailHeader from "./components/BookingDetailHeader";
 import BookingDetailSummary from "./components/BookingDetailSummary";
 import BookingInfoCard from "./components/BookingInfoCard";
 import PreAppointmentInstructions from "./components/PreAppointmentInstructions";
-import { fetchBookingDetail, fetchDoctors } from "@/src/lib/api";
+import { fetchBookingDetail, fetchDoctors, cancelBooking } from "@/src/lib/api";
 import { formatBookingHistoryRows } from "@/src/utils/doctorHelper";
+import { useState } from "react";
+import NotificationModal from "../components/NotificationModal";
 
 export default function BookingDetail() {
   const params = useParams<{ bookingCode: string }>();
+  const queryClient = useQueryClient();
+  const [showConfirmCancel, setShowConfirmCancel] = useState(false);
+  const [modal, setModal] = useState({
+    isOpen: false,
+    type: "success" as "success" | "error",
+    title: "",
+    message: "",
+  });
   
   const { data: rawBooking, isLoading: bookingLoading } = useQuery({
     queryKey: ["booking", params.bookingCode],
@@ -25,6 +35,37 @@ export default function BookingDetail() {
     queryKey: ["doctors"],
     queryFn: fetchDoctors,
   });
+
+  const cancelMutation = useMutation({
+    mutationFn: () => cancelBooking(params.bookingCode),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["booking", params.bookingCode] });
+      setShowConfirmCancel(false);
+      setModal({
+        isOpen: true,
+        type: "success",
+        title: "Booking Dibatalkan",
+        message: "Janji temu Anda telah berhasil dibatalkan.",
+      });
+    },
+    onError: (error: any) => {
+      setShowConfirmCancel(false);
+      setModal({
+        isOpen: true,
+        type: "error",
+        title: "Gagal Membatalkan",
+        message: error.message || "Terjadi kesalahan saat membatalkan booking.",
+      });
+    }
+  });
+
+  const handleCancel = () => {
+    setShowConfirmCancel(true);
+  };
+
+  const confirmCancel = () => {
+    cancelMutation.mutate();
+  };
 
   if (bookingLoading || !doctorsData) {
     return (
@@ -53,7 +94,7 @@ export default function BookingDetail() {
           <div className="rounded-lg border border-gray-200 bg-white p-8">
             <h1 className="text-2xl font-semibold">Booking tidak ditemukan</h1>
             <p className="mt-2 text-sm text-gray-600">
-              Kode booking {params.bookingCode} tidak ditemukan di sistem.
+              Data booking tidak ditemukan di sistem.
             </p>
           </div>
         </div>
@@ -63,8 +104,53 @@ export default function BookingDetail() {
 
   return (
     <main className="min-h-screen bg-slate-50 text-gray-900">
+      <NotificationModal
+        isOpen={modal.isOpen}
+        onClose={() => setModal({ ...modal, isOpen: false })}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+      />
+
+      {/* Confirmation Modal for Cancellation */}
+      {showConfirmCancel && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/50 px-4">
+          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="text-center">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
+                <XCircle className="h-10 w-10 text-red-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900">Batalkan Booking?</h3>
+              <p className="mt-2 text-gray-600">
+                Apakah Anda yakin ingin membatalkan janji temu ini? Tindakan ini tidak dapat dibatalkan.
+              </p>
+              
+              <div className="mt-6 flex gap-3">
+                <button
+                  onClick={() => setShowConfirmCancel(false)}
+                  className="flex-1 rounded-lg border border-gray-300 py-3 font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Tidak, Kembali
+                </button>
+                <button
+                  onClick={confirmCancel}
+                  disabled={cancelMutation.isPending}
+                  className="flex-1 rounded-lg bg-red-600 py-3 font-semibold text-white hover:bg-red-700 transition-colors disabled:opacity-50"
+                >
+                  {cancelMutation.isPending ? "Proses..." : "Ya, Batalkan"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="mx-auto max-w-6xl px-6 py-8">
-        <BookingDetailHeader />
+        <BookingDetailHeader 
+          status={booking.status} 
+          onCancel={handleCancel}
+          isCancelling={cancelMutation.isPending}
+        />
 
         <div className="grid gap-6 lg:grid-cols-[18rem_1fr]">
           <aside className="space-y-6">

@@ -48,8 +48,8 @@ export default function BookingInfoCard({ booking, type }: Props) {
               <dd className="mt-1 text-teal-700">{booking.department}</dd>
             </div>
             <div>
-              <dt className="font-semibold uppercase text-gray-900">Ruangan</dt>
-              <dd className="mt-1 text-teal-700">{booking.room}</dd>
+              <dt className="font-semibold uppercase text-gray-900">Lokasi</dt>
+              <dd className="mt-1 text-teal-700">{booking.location} - Ruangan {booking.room}</dd>
             </div>
           </>
         ) : (

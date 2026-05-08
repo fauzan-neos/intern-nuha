@@ -1,21 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
-import { fetchDoctors, fetchUser } from "@/src/lib/api";
+import { fetchSpecializations, fetchUser } from "@/src/lib/api";
 import Navbar from "../../components/navbar";
 import DoctorList from "./components/doctorList";
 import DoctorFilter from "./components/doctorFilter";
 import DoctorHero from "./components/doctorHero";
 import Footer from "../../components/footer";
 import SpecializationList from "./components/specializationList";
+import { Specialization } from "@/src/lib/types";
 
 export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-teal-600 font-medium">Memuat portal...</div>}>
+      <HomePageContent />
+    </Suspense>
+  );
+}
+
+function HomePageContent() {
   const [search, setSearch] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const selectedSpec = searchParams.get("specialization");
+  // const selectedSpec = searchParams.get("specialization");
+  // const initialSpec = searchParams.get("specialization") || "";
+  // const [specialization, setSpecialization] = useState(initialSpec);
+
+  const selectedSpec = searchParams.get("specialization") || "";
+  const [specialization, setSpecialization] = useState(selectedSpec);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSpecialization(selectedSpec);
+  }, [selectedSpec, searchParams]);
 
   const { isSuccess } = useQuery({
     queryKey: ["auth", "user"],
@@ -23,38 +42,48 @@ export default function HomePage() {
     retry: false,
   });
 
-  const { data: doctors, isLoading } = useQuery({
-    queryKey: ["doctors"],
-    queryFn: fetchDoctors,
-  })
+  const { data: specializationList = [] } = useQuery({
+    queryKey: ["specializations"],
+    queryFn: fetchSpecializations,
+  });
+
+  // Ambil nama spesialisasi dari list berdasarkan UUID yang ada di URL
+  const currentSpecName = specializationList.find((s: Specialization) => s.uuid === specialization || s.name === specialization)?.name || specialization;
 
   const doctorContent = (
     <>
-      <DoctorFilter search={search} setSearch={setSearch} />
-      {!selectedSpec ? (
+      <DoctorFilter 
+        search={search} 
+        setSearch={setSearch} 
+      />
+      {!specialization ? (
         search ? (
           <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">Hasil Pencarian: "{search}"</h2>
+            <h2 className="text-xl text-gray-900 font-semibold mb-2">Hasil Pencarian Dokter : {search}</h2>
             <DoctorList specialization={null} search={search} />
           </div>
         ) : (
           <>
-            <h2 className="text-xl font-semibold">Pilih Spesialisasi</h2>
+            <h2 className="text-xl font-semibold text-gray-900">Pilih Spesialisasi</h2>
             <SpecializationList />
           </>
         )
       ) : (
         <>
-          <button
-            onClick={() => {
-              router.replace("/doctor", { scroll: false });
-            }}
-            className="text-teal-700"
-          >
-            &larr; Kembali
-          </button>
-          <h2 className="text-xl font-semibold">{selectedSpec} Doctors</h2>
-          <DoctorList specialization={selectedSpec} search={search} />
+          <div className="flex flex-col gap-4">
+            <button
+              onClick={() => {
+                router.replace("/doctor", { scroll: false });
+              }}
+              className="w-fit text-teal-700 font-medium hover:underline"
+            >
+              &larr; Kembali ke Semua Spesialisasi
+            </button>
+            <h2 className="text-xl font-semibold text-gray-900">
+              Dokter Spesialis {currentSpecName}
+            </h2>
+            <DoctorList specialization={specialization} search={search} />
+          </div>
         </>
       )}
     </>

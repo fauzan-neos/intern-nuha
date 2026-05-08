@@ -38,7 +38,7 @@ export default function DoctorAvailability() {
           <div>Spesialis</div>
           {upcomingDays.map((day, idx) => (
             <div key={idx} className={idx === 0 ? "text-teal-700" : ""}>
-              {idx === 0 ? "Today" : day}
+              {idx === 0 ? "Hari Ini" : day}
             </div>
           ))}
           <div className="text-right pr-2">Aksi</div>

@@ -6,6 +6,14 @@ type Props = {
   bookings: BookingHistoryRow[];
 };
 
+function formatLongDate(date: string) {
+  return new Intl.DateTimeFormat("id-ID", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(`${date}T00:00:00`));
+}
+
 export default function BookingTable({ bookings }: Props) {
   return (
     <div className="overflow-hidden rounded-md border border-gray-200 bg-white">
@@ -29,13 +37,13 @@ export default function BookingTable({ bookings }: Props) {
           <span>{booking.doctorName}</span>
           <span>{booking.specialization}</span>
           <span>
-            {booking.appointmentDate}, {booking.appointmentStartTime} - {booking.appointmentEndTime}
+            {formatLongDate(booking.appointmentDate)}, {booking.appointmentStartTime} - {booking.appointmentEndTime}
           </span>
           <span>
             <BookingStatusBadge status={booking.bookingStatus} />
           </span>
           <Link
-            href={`/booking/${booking.bookingCode}`}
+            href={`/booking/${booking.uuid}`}
             className="font-semibold text-teal-700 hover:text-teal-900"
           >
             Lihat detail booking

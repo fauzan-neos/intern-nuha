@@ -15,19 +15,19 @@ export default function DoctorList({ specialization, search }: Props) {
     queryFn: fetchDoctors
   })
 
-  let filtered = doctorsData;
+  const filtered = doctorsData?.filter((doctor) => {
+    // 1. Filter berdasarkan Nama (Search)
+    const matchSearch = !search || doctor.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
 
-  // Filter by Specialization
-  if (specialization) {
-    filtered = filtered?.filter((d) => d.specialization?.name === specialization);
-  }
+    // 2. Filter berdasarkan Spesialisasi (bisa UUID atau Nama)
+    const matchSpec = !specialization ||
+      doctor.specialization?.uuid === specialization ||
+      doctor.specialization?.name === specialization;
 
-  // Filter by Search (Name)
-  if (search) {
-    filtered = filtered?.filter((d) => 
-      d.name.toLowerCase().includes(search.toLowerCase())
-    );
-  }
+    return matchSearch && matchSpec;
+  });
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

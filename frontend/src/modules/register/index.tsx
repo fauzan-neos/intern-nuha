@@ -7,10 +7,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterSchema } from "./utils/validation";
 import { useRegister } from "./hooks/useRegister";
 import * as z from "zod";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import NotificationModal from "../components/NotificationModal";
 
 type FormValues = z.infer<typeof RegisterSchema>;
 
 export default function RegisterForm() {
+    const router = useRouter();
+    const [modal, setModal] = useState({
+        isOpen: false,
+        type: "success" as "success" | "error",
+        title: "",
+        message: "",
+    });
+
     const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
       resolver: zodResolver(RegisterSchema)
     });
@@ -18,11 +29,39 @@ export default function RegisterForm() {
     const {mutate, isPending} = useRegister();
 
     const onSubmit = (data: FormValues) => {
-      mutate(data);
+      mutate(data, {
+        onSuccess: (res) => {
+            setModal({
+                isOpen: true,
+                type: "success",
+                title: "Registrasi Berhasil",
+                message: res.message || "Akun Anda telah berhasil dibuat. Silakan masuk.",
+            });
+            setTimeout(() => {
+                router.push("/login");
+            }, 2000);
+        },
+        onError: (err) => {
+            setModal({
+                isOpen: true,
+                type: "error",
+                title: "Registrasi Gagal",
+                message: err.message || "Gagal membuat akun. Silakan coba lagi.",
+            });
+        }
+      });
     };
 
     return (
     <div className="min-h-screen flex">
+      <NotificationModal
+          isOpen={modal.isOpen}
+          onClose={() => setModal({ ...modal, isOpen: false })}
+          type={modal.type}
+          title={modal.title}
+          message={modal.message}
+          showCloseButton={modal.type === "error"}
+      />
       
       <div className="hidden md:flex w-1/2 relative">
         <Image

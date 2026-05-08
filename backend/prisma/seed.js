@@ -17,6 +17,36 @@ async function main() {
     { name: 'Pediatrics', code: 'PED', description: 'Layanan kesehatan khusus bayi dan anak-anak.' },
     { name: 'Dentistry', code: 'DENT', description: 'Perawatan kesehatan gigi dan mulut.' },
     { name: 'Neurology', code: 'NEU', description: 'Spesialis sistem saraf dan otak.' },
+
+    { name: 'Dermatology', code: 'DERM', description: 'Perawatan kesehatan kulit, rambut, dan kuku.' },
+    { name: 'Orthopedics', code: 'ORTHO', description: 'Penanganan tulang, sendi, dan otot.' },
+    { name: 'Ophthalmology', code: 'OPHT', description: 'Spesialis kesehatan mata dan penglihatan.' },
+    { name: 'Psychiatry', code: 'PSY', description: 'Layanan kesehatan mental dan emosional.' },
+    { name: 'Obstetrics & Gynecology', code: 'OBGYN', description: 'Kesehatan reproduksi wanita dan kehamilan.' },
+
+    { name: 'Urology', code: 'URO', description: 'Penanganan saluran kemih dan reproduksi pria.' },
+    { name: 'Pulmonology', code: 'PUL', description: 'Spesialis paru-paru dan sistem pernapasan.' },
+    { name: 'Endocrinology', code: 'ENDO', description: 'Gangguan hormon dan metabolisme tubuh.' },
+    { name: 'Gastroenterology', code: 'GAST', description: 'Spesialis sistem pencernaan.' },
+    { name: 'Nephrology', code: 'NEPH', description: 'Penanganan penyakit ginjal.' },
+
+    { name: 'Oncology', code: 'ONC', description: 'Diagnosis dan pengobatan kanker.' },
+    { name: 'Hematology', code: 'HEMA', description: 'Gangguan darah dan sistem hematologi.' },
+    { name: 'Rheumatology', code: 'RHEU', description: 'Penyakit sendi dan autoimun.' },
+    { name: 'Allergy & Immunology', code: 'ALL', description: 'Penanganan alergi dan sistem imun.' },
+    { name: 'Infectious Disease', code: 'INF', description: 'Spesialis penyakit infeksi dan menular.' },
+
+    { name: 'Radiology', code: 'RAD', description: 'Pemeriksaan pencitraan medis dan radiologi.' },
+    { name: 'Anesthesiology', code: 'ANES', description: 'Layanan anestesi dan manajemen nyeri.' },
+    { name: 'Plastic Surgery', code: 'PLAS', description: 'Bedah rekonstruksi dan estetika.' },
+    { name: 'ENT (Otolaryngology)', code: 'ENT', description: 'Kesehatan telinga, hidung, dan tenggorokan.' },
+    { name: 'Physical Medicine & Rehabilitation', code: 'PMR', description: 'Rehabilitasi medis dan terapi fisik.' },
+
+    { name: 'Emergency Medicine', code: 'EMR', description: 'Penanganan kondisi darurat medis.' },
+    { name: 'Family Medicine', code: 'FAM', description: 'Perawatan kesehatan keluarga menyeluruh.' },
+    { name: 'Sports Medicine', code: 'SPORT', description: 'Cedera olahraga dan kebugaran fisik.' },
+    { name: 'Geriatrics', code: 'GER', description: 'Perawatan kesehatan lansia.' },
+    { name: 'Nutrition & Dietetics', code: 'NUT', description: 'Konsultasi nutrisi dan pola makan sehat.' },
   ];
 
   const specMap = {};
@@ -46,30 +76,60 @@ async function main() {
   await prisma.doctor.deleteMany({});
 
   // 3. Buat Data Dokter Massal
-  const doctors = [
-    { name: 'Dr. Sarah Wijaya', code: 'SW', email: 'sarah.wijaya@medcare.com', spec: 'CARD', exp: 12, rate: 4.9, img: '/doc_sarah.jpg', dept: 'Cardiology', room: 'A-101', loc: 'Lantai 1, Gedung Utama' },
-    { name: 'Dr. Marcus Holloway', code: 'MH', email: 'marcus.h@medcare.com', spec: 'GEN', exp: 8, rate: 4.7, img: '/doc_marcus.jpg', dept: 'General Medicine', room: 'B-205', loc: 'Lantai 2, Gedung B' },
-    { name: 'Dr. Eko Prasetyo', code: 'EP', email: 'eko.p@medcare.com', spec: 'PED', exp: 15, rate: 5.0, img: '/doc_eko.jpg', dept: 'Pediatrics', room: 'C-302', loc: 'Lantai 3, Gedung C' },
-    { name: 'Dr. Linda Kusuma', code: 'LK', email: 'linda.k@medcare.com', spec: 'DENT', exp: 5, rate: 4.5, img: '/doc_marcus.jpg', dept: 'Dentistry', room: 'A-105', loc: 'Lantai 1, Gedung Utama' },
-    { name: 'Dr. Ahmad Fauzi', code: 'AF', email: 'ahmad.f@medcare.com', spec: 'NEU', exp: 10, rate: 4.8, img: '/doc_sarah.jpg', dept: 'Neurology', room: 'D-401', loc: 'Lantai 4, Gedung D' },
-    { name: 'Dr. Jessica Tan', code: 'JT', email: 'jessica.t@medcare.com', spec: 'CARD', exp: 7, rate: 4.6, img: '/doc_sarah.jpg', dept: 'Cardiology', room: 'A-102', loc: 'Lantai 1, Gedung Utama' },
-  ];
+  const firstNames = ['Sarah', 'Marcus', 'Eko', 'Linda', 'Ahmad', 'Jessica', 'Budi', 'Siti', 'Andi', 'Rina', 'Dewi', 'Agus', 'Maya', 'Rudi', 'Nina', 'Fajar', 'Lina', 'Hendra', 'Sari', 'Tono', 'Yulia', 'Rizky', 'Dina', 'Bayu', 'Mira', 'Eka', 'Ratna', 'Wawan', 'Intan', 'Fauzan', 'Siska', 'Hadi', 'Lia', 'Rian', 'Nadia', 'Doni', 'Vina', 'Arif', 'Sinta', 'Gilang', 'Melly'];
+  const lastNames = ['Wijaya', 'Holloway', 'Prasetyo', 'Kusuma', 'Fauzi', 'Tan', 'Santoso', 'Lestari', 'Saputra', 'Putri', 'Gunawan', 'Nugroho', 'Yuliana', 'Hidayat', 'Suryanto', 'Dewi', 'Kurniawan', 'Utami', 'Wibowo', 'Ramadhan'];
+  const images = ['/doc_sarah.jpg', '/doc_marcus.jpg', '/doc_eko.jpg'];
 
-  for (const d of doctors) {
+  const usedEmployeeCodes = new Set();
+  
+  for (let i = 1; i <= 70; i++) {
+    const fName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const lName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    const fullName = `Dr. ${fName} ${lName}`;
+    const email = `doctor${i}@medcare.com`;
+    const spec = specializations[Math.floor(Math.random() * specializations.length)];
+    const specCode = specializations.find(s => s.name === spec.name).code;
+
+    let employeeCode = "";
+    const firstChars = fName.toUpperCase().replace(/[^A-Z]/g, "");
+    const lastChars = lName.toUpperCase().replace(/[^A-Z]/g, "");
+
+    // coba semua kombinasi 2 huruf
+    outer:
+    for (const fChar of firstChars) {
+      for (const lChar of lastChars) {
+        const candidate = `${fChar}${lChar}`;
+
+        if (!usedEmployeeCodes.has(candidate)) {
+          employeeCode = candidate;
+          break outer;
+        }
+      }
+    }
+
+    // fallback jika semua kombinasi habis
+    if (!employeeCode) {
+      throw new Error(
+        `Tidak bisa generate employee code unik untuk ${fullName}`
+      );
+    }
+
+    usedEmployeeCodes.add(employeeCode);
+
     const createdDoc = await prisma.doctor.upsert({
-      where: { email: d.email },
+      where: { email: email },
       update: {},
       create: {
-        name: d.name,
-        employeeCode: d.code,
-        email: d.email,
-        experienceYears: d.exp,
-        rating: d.rate,
-        specializationId: specMap[d.spec],
-        image: d.img,
-        department: d.dept,
-        room: d.room,
-        location: d.loc
+        name: fullName,
+        employeeCode : employeeCode,
+        email: email,
+        experienceYears: Math.floor(Math.random() * 20) + 1,
+        rating: parseFloat((Math.random() * (5 - 4) + 4).toFixed(1)),
+        specializationId: specMap[specCode],
+        image: images[Math.floor(Math.random() * images.length)],
+        department: spec.name,
+        room: `${String.fromCharCode(65 + (i % 4))}-${100 + i}`,
+        location: `Lantai ${Math.floor(i / 20) + 1}, Gedung ${String.fromCharCode(65 + (i % 3))}`
       },
     });
 

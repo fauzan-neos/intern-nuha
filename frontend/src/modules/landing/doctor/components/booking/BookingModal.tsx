@@ -4,20 +4,19 @@ import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X, ArrowLeft, CheckCircle2 } from "lucide-react";
-import { AppointmentSlot, Doctor } from "@/src/lib/types";
+import { Doctor } from "@/src/lib/types";
 import {
   BookingFormValues,
   bookingSchema,
 } from "@/src/modules/landing/doctor/utils/validation";
 import AppointmentSlotPicker from "./AppointmentSlotPicker";
-import { getAvailableDates } from "@/src/utils/doctorHelper";
+import { getAvailableDates, groupSlotsIntoSessions } from "@/src/utils/doctorHelper";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { fetchAvailableSlots, createBooking } from "@/src/lib/api";
 import toast from "react-hot-toast";
 
 type Props = {
   doctor: Doctor;
-  appointmentSlots: AppointmentSlot[];
   onClose: () => void;
 };
 
@@ -92,8 +91,10 @@ export default function BookingModal({
   };
 
   const finalSubmit = (data: BookingFormValues) => {
-    // Cari slot yang dipilih untuk mendapatkan end time
-    const selectedSlotData = dynamicSlots.find((s:AppointmentSlot) => s.start === data.slotStart);
+    // 1. Kelompokkan slot ke dalam sesi menggunakan helper
+    const sessions = groupSlotsIntoSessions(dynamicSlots);
+    // 2. Cari sesi yang dipilih berdasarkan slotStart (startTime)
+    const selectedSession = sessions.find(s => s.startTime === data.slotStart);
     
     mutation.mutate({
       doctorId: doctor.id,
@@ -108,7 +109,7 @@ export default function BookingModal({
       complaint: data.complaint,
       appointmentDate: data.appointmentDate,
       appointmentStartTime: data.slotStart,
-      appointmentEndTime: selectedSlotData?.end || "",
+      appointmentEndTime: selectedSession?.endTime || "",
       scheduleId: data.scheduleId,
     });
   };
@@ -296,18 +297,34 @@ export default function BookingModal({
               {errors.birthDate && <p className="text-xs text-red-600">{errors.birthDate.message}</p>}
             </label>
 
-            <label className="space-y-1">
+            <div className="space-y-1">
               <span className="text-sm font-medium">Jenis kelamin</span>
-              <select
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-teal-600"
-                {...register("gender")}
-              >
-                <option value="">Pilih jenis kelamin</option>
-                <option value="male">Laki-laki</option>
-                <option value="female">Perempuan</option>
-              </select>
+              <div className="flex gap-2">
+                <label className="flex-1 cursor-pointer">
+                  <input
+                    type="radio"
+                    value="male"
+                    className="sr-only peer"
+                    {...register("gender")}
+                  />
+                  <div className="flex justify-center rounded-md border border-gray-300 py-2 text-sm peer-checked:border-teal-600 peer-checked:bg-teal-50 peer-checked:text-teal-900">
+                    Laki-laki
+                  </div>
+                </label>
+                <label className="flex-1 cursor-pointer">
+                  <input
+                    type="radio"
+                    value="female"
+                    className="sr-only peer"
+                    {...register("gender")}
+                  />
+                  <div className="flex justify-center rounded-md border border-gray-300 py-2 text-sm peer-checked:border-teal-600 peer-checked:bg-teal-50 peer-checked:text-teal-900">
+                    Perempuan
+                  </div>
+                </label>
+              </div>
               {errors.gender && <p className="text-xs text-red-600">{errors.gender.message}</p>}
-            </label>
+            </div>
 
             <label className="space-y-1">
               <span className="text-sm font-medium">Nomor telepon</span>
@@ -339,18 +356,34 @@ export default function BookingModal({
             {errors.address && <p className="text-xs text-red-600">{errors.address.message}</p>}
           </label>
 
-          <label className="block space-y-1">
+          <div className="space-y-1">
             <span className="text-sm font-medium">Jenis Asuransi</span>
-            <select
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-teal-600"
-              {...register("paymentMethod")}
-            >
-              <option value="">Pilih jenis asuransi</option>
-              <option value="umum">Umum</option>
-              <option value="bpjs">BPJS</option>
-            </select>
+            <div className="flex gap-2">
+              <label className="flex-1 cursor-pointer">
+                <input
+                  type="radio"
+                  value="umum"
+                  className="sr-only peer"
+                  {...register("paymentMethod")}
+                />
+                <div className="flex justify-center rounded-md border border-gray-300 py-2 text-sm peer-checked:border-teal-600 peer-checked:bg-teal-50 peer-checked:text-teal-900">
+                  Umum
+                </div>
+              </label>
+              <label className="flex-1 cursor-pointer">
+                <input
+                  type="radio"
+                  value="bpjs"
+                  className="sr-only peer"
+                  {...register("paymentMethod")}
+                />
+                <div className="flex justify-center rounded-md border border-gray-300 py-2 text-sm peer-checked:border-teal-600 peer-checked:bg-teal-50 peer-checked:text-teal-900">
+                  BPJS
+                </div>
+              </label>
+            </div>
             {errors.paymentMethod && <p className="text-xs text-red-600">{errors.paymentMethod.message}</p>}
-          </label>
+          </div>
 
           <label className="block space-y-1">
             <span className="text-sm font-medium">Keluhan utama</span>

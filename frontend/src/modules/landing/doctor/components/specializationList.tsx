@@ -17,7 +17,7 @@ export default function SpecializationList() {
           key={spec.id}
           name={spec.name}
           description={spec.description}
-          href={`/doctor?specialization=${encodeURIComponent(spec.name)}`}
+          href={`/doctor?specialization=${spec.uuid}`}
         />
       ))}
     </div>

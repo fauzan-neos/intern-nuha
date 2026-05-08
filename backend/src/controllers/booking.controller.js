@@ -2,7 +2,8 @@ const {
     createBookingService, 
     getMyBookingsService, 
     getBookingDetailService,
-    generateAvailableSlots
+    generateAvailableSlots,
+    cancelBookingService
 } = require("../services/booking.service");
 
 async function createBooking(req, res) {
@@ -40,14 +41,32 @@ async function getMyBookings(req, res) {
 
 async function getBookingDetail(req, res) {
     try {
-        const { bookingCode } = req.params;
-        const booking = await getBookingDetailService(bookingCode);
+        const { uuid } = req.params;
+        const booking = await getBookingDetailService(uuid);
         res.json({
             status: "success",
             data: booking
         });
     } catch (error) {
         res.status(404).json({
+            status: "error",
+            message: error.message
+        });
+    }
+}
+
+async function cancelBooking(req, res) {
+    try {
+        const { uuid } = req.params;
+        const userId = req.user.id;
+        const booking = await cancelBookingService(uuid, userId);
+        res.json({
+            status: "success",
+            message: "Booking berhasil dibatalkan",
+            data: booking
+        });
+    } catch (error) {
+        res.status(400).json({
             status: "error",
             message: error.message
         });
@@ -72,5 +91,6 @@ module.exports = {
     getAvailableSlots,
     createBooking,
     getMyBookings,
-    getBookingDetail
+    getBookingDetail,
+    cancelBooking
 };

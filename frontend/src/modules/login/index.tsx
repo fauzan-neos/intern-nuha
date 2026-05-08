@@ -7,10 +7,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { loginSchema } from "./utils/validation";
 import { useLogin } from "./hooks/useLogin";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import NotificationModal from "../components/NotificationModal";
 
 type FormValues = z.infer<typeof loginSchema> 
 
 export default function LoginForm() {
+    const router = useRouter();
+    const [modal, setModal] = useState({
+        isOpen: false,
+        type: "success" as "success" | "error",
+        title: "",
+        message: "",
+    });
+
     const { register, handleSubmit, formState: {errors} } = useForm<FormValues>({
         resolver: zodResolver(loginSchema)
     });
@@ -18,10 +29,38 @@ export default function LoginForm() {
     const {mutate, isPending} = useLogin();
 
     const onSubmit = (data: FormValues) => {
-      mutate(data);
+      mutate(data, {
+        onSuccess: (res) => {
+            setModal({
+                isOpen: true,
+                type: "success",
+                title: "Login Berhasil",
+                message: res.data.message || "Selamat datang kembali!",
+            });
+            setTimeout(() => {
+                router.push("/dashboard");
+            }, 2000);
+        },
+        onError: (err) => {
+            setModal({
+                isOpen: true,
+                type: "error",
+                title: "Login Gagal",
+                message: err.message || "Email atau password salah.",
+            });
+        }
+      });
     };
     return (
         <div className="min-h-screen flex">
+            <NotificationModal
+                isOpen={modal.isOpen}
+                onClose={() => setModal({ ...modal, isOpen: false })}
+                type={modal.type}
+                title={modal.title}
+                message={modal.message}
+                showCloseButton={modal.type === "error"}
+            />
             
             <div className="hidden md:flex w-1/2 relative">
                 <Image

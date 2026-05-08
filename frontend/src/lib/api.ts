@@ -83,13 +83,23 @@ export async function fetchMyBookings(): Promise<Booking[]> {
     return data.data;
 }
 
-export async function fetchBookingDetail(bookingCode: string): Promise<Booking> {
-    const res = await fetch(`${API_URL}/api/bookings/${bookingCode}`, {
+export async function fetchBookingDetail(uuid: string): Promise<Booking> {
+    const res = await fetch(`${API_URL}/api/bookings/${uuid}`, {
         credentials: "include",
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message);
     return data.data;
+}
+
+export async function cancelBooking(uuid: string) {
+    const res = await fetch(`${API_URL}/api/bookings/${uuid}/cancel`, {
+        method: "PATCH",
+        credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message);
+    return data;
 }
 
 export async function fetchAvailableSlots(doctorId: number, date: string, scheduleId: number) {
