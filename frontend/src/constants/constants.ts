@@ -1,4 +1,4 @@
-import { Access } from "../lib/types";
+import { Access } from "@/src/lib/types";
 
 export const quickAccess: Access[] = [
   { id: 1, title: "Rekam Medis" },

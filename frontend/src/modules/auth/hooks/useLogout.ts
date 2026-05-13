@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { logout } from "@/src/lib/api";
-import { authUserQueryKey } from "./useAuthUser";
+import { authUserQueryKey } from "@/src/modules/auth/hooks/useAuthUser";
 
 type Options = {
   onSuccess?: () => void;

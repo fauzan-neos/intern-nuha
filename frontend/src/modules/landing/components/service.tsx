@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchSpecializations } from "@/src/lib/api";
 import Link from "next/link";
+import { DOCTORS_PAGE_URL } from "@/src/constants/constants";
 
 export default function Service() {
   const { data: specializations, isLoading } = useQuery({
@@ -26,7 +27,7 @@ export default function Service() {
           </p>
         </div>
 
-        <Link href={"/doctor"}
+        <Link href={DOCTORS_PAGE_URL}
           className="text-teal-600 font-medium hover:text-teal-700 transition-colors"
         >
           Lihat Semua

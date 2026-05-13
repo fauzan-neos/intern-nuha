@@ -4,12 +4,12 @@ import { Suspense, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchSpecializations, fetchUser } from "@/src/lib/api";
-import Navbar from "../../components/navbar";
-import DoctorList from "./components/doctorList";
-import DoctorFilter from "./components/doctorFilter";
-import DoctorHero from "./components/doctorHero";
-import Footer from "../../components/footer";
-import SpecializationList from "./components/specializationList";
+import Navbar from "@/src/components/navbar";
+import DoctorList from "@/src/modules/doctor/components/doctorList";
+import DoctorFilter from "@/src/modules/doctor/components/doctorFilter";
+import DoctorHero from "@/src/modules/doctor/components/doctorHero";
+import Footer from "@/src/components/footer";
+import SpecializationList from "@/src/modules/doctor/components/specializationList";
 import { Specialization } from "@/src/lib/types";
 
 export default function HomePage() {
@@ -97,9 +97,6 @@ function HomePageContent() {
           <main className="min-h-screen bg-slate-50 px-5 pb-12 pt-28 text-gray-900">
             <div className="mx-auto max-w-6xl space-y-6">
               <div>
-                <p className="text-sm font-medium text-teal-700">
-                  Portal Pasien
-                </p>
                 <h1 className="mt-1 text-3xl font-semibold">
                   Cari dan booking dokter
                 </h1>

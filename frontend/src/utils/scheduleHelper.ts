@@ -3,8 +3,8 @@ import {
     UpcomingScheduleItem, 
     Weekday, 
 } from "../lib/types";
-import { addDays, formatDateValue } from "./dateHelper";
-import { formatTimeRange } from "./timeHelper";
+import { addDays, formatDateValue } from "@/src/utils/dateHelper";
+import { formatTimeRange } from "@/src/utils/timeHelper";
 
 // Ambil jadwal 5 hari kedepan (Skip Hari Minggu)
 export function getUpcomingSchedule(

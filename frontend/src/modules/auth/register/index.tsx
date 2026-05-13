@@ -4,12 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterSchema } from "./utils/validation";
-import { useRegister } from "./hooks/useRegister";
+import { RegisterSchema } from "@/src/modules/auth/register/utils/validation";
+import { useRegister } from "@/src/modules/auth/register/hooks/useRegister";
 import * as z from "zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import NotificationModal from "../../../components/NotificationModal";
+import NotificationModal from "@/src/components/NotificationModal";
 import { LOGIN_PAGE_URL } from "@/src/constants/constants";
 
 type FormValues = z.infer<typeof RegisterSchema>;
@@ -31,23 +31,23 @@ export default function RegisterForm() {
 
     const onSubmit = (data: FormValues) => {
       mutate(data, {
-        onSuccess: (res) => {
+        onSuccess: () => {
             setModal({
                 isOpen: true,
                 type: "success",
                 title: "Registrasi Berhasil",
-                message: res.message || "Akun Anda telah berhasil dibuat. Silakan masuk.",
+                message: "Akun Anda telah berhasil dibuat. Silakan masuk.",
             });
             setTimeout(() => {
                 router.push(LOGIN_PAGE_URL);
             }, 2000);
         },
-        onError: (err) => {
+        onError: () => {
             setModal({
                 isOpen: true,
                 type: "error",
                 title: "Registrasi Gagal",
-                message: err.message || "Gagal membuat akun. Silakan coba lagi.",
+                message: "Gagal membuat akun. Silakan coba lagi.",
             });
         }
       });

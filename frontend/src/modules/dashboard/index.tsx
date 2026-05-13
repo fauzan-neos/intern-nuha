@@ -1,15 +1,15 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import Navbar from "../../components/navbar";
-import UpcomingAppointment from "./components/upcomingAppointment";
-import Stats from "./components/stats";
-import QuickAccess from "./components/quickAcces";
-import HospitalUpdates from "./components/hospitalUpdates";
-import { useAuthUser } from "../auth/hooks/useAuthUser";
-import Footer from "../../components/footer";
+import Navbar from "@/src/components/navbar";
+import UpcomingAppointment from "@/src/modules/dashboard/components/upcomingAppointment";
+import Stats from "@/src/modules/dashboard/components/stats";
+import QuickAccess from "@/src/modules/dashboard/components/quickAcces";
+import HospitalUpdates from "@/src/modules/dashboard/components/hospitalUpdates";
+import { useAuthUser } from "@/src/modules/auth/hooks/useAuthUser";
+import Footer from "@/src/components/footer";
 import { fetchMyBookings, fetchHospitalUpdates, fetchDoctors } from "@/src/lib/api";
-import { quickAccess } from "../../constants/constants";
+import { quickAccess } from "@/src/constants/constants";
 import { formatBookingHistoryRows } from "@/src/utils/bookingHelper";
 
 export default function HomePage() {

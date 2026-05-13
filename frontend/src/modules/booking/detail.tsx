@@ -4,15 +4,15 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, XCircle } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import BookingDetailDoctorCard from "./components/BookingDetailDoctorCard";
-import BookingDetailHeader from "./components/BookingDetailHeader";
-import BookingDetailSummary from "./components/BookingDetailSummary";
-import BookingInfoCard from "./components/BookingInfoCard";
-import PreAppointmentInstructions from "./components/PreAppointmentInstructions";
+import BookingDetailDoctorCard from "@/src/modules/booking/components/BookingDetailDoctorCard";
+import BookingDetailHeader from "@/src/modules/booking/components/BookingDetailHeader";
+import BookingDetailSummary from "@/src/modules/booking/components/BookingDetailSummary";
+import BookingInfoCard from "@/src/modules/booking/components/BookingInfoCard";
+import PreAppointmentInstructions from "@/src/modules/booking/components/PreAppointmentInstructions";
 import { fetchBookingDetail, fetchDoctors, cancelBooking } from "@/src/lib/api";
 import { formatBookingHistoryRows } from "@/src/utils/bookingHelper";
 import { useState } from "react";
-import NotificationModal from "../../components/NotificationModal";
+import NotificationModal from "@/src/components/NotificationModal";
 import { BOOKING_PAGE_URL } from "@/src/constants/constants";
 
 export default function BookingDetail() {

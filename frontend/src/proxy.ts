@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { BOOKING_PAGE_URL, DASHBOARD_PAGE_URL, LOGIN_PAGE_URL, REGISTER_PAGE_URL } from "./constants/constants";
+import { BOOKING_PAGE_URL, DASHBOARD_PAGE_URL, LOGIN_PAGE_URL, REGISTER_PAGE_URL } from "@/src/constants/constants";
 
 export function proxy(request: NextRequest) {
     const token = request.cookies.get("token")?.value;

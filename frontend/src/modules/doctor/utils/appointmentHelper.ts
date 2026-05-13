@@ -4,9 +4,9 @@ import {
     Doctor, 
     Weekday, 
     AppointmentSession 
-} from "../lib/types";
-import { formatDateValue } from "./dateHelper";
-import { formatTimeRange, timeToMinutes } from "./timeHelper";
+} from "@/src/lib/types";
+import { formatDateValue } from "@/src/utils/dateHelper";
+import { formatTimeRange, timeToMinutes } from "@/src/utils/timeHelper";
 
 // Ambil slot appointment untuk tanggal tertentu
 export function getAppointmentSlots(

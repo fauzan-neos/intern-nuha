@@ -3,9 +3,9 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import Navbar from "../../components/navbar";
+import Navbar from "@/src/components/navbar";
 import { useAuthUser } from "@/src/modules/auth/hooks/useAuthUser";
-import BookingTable from "./components/BookingTable";
+import BookingTable from "@/src/modules/booking/components/BookingTable";
 import { fetchMyBookings, fetchDoctors } from "@/src/lib/api";
 import { formatBookingHistoryRows } from "@/src/utils/bookingHelper";
 import { LOGIN_PAGE_URL } from "@/src/constants/constants";
@@ -54,7 +54,7 @@ export default function Booking() {
       <main className="min-h-screen bg-slate-50 px-5 pb-12 pt-28 text-gray-900">
         <div className="mx-auto max-w-6xl space-y-6">
           <div>
-            <p className="text-sm font-medium text-teal-700">Portal Pasien</p>
+            <p className="text-sm font-medium text-teal-700"></p>
             <h1 className="mt-1 text-3xl font-semibold">Booking Saya</h1>
             <p className="mt-2 max-w-2xl text-sm text-gray-600">
               Lihat riwayat booking konsultasi dokter Anda.

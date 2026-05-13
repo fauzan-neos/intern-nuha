@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AuthUser } from "@/src/modules/auth/hooks/useAuthUser";
 import { useLogout } from "@/src/modules/auth/hooks/useLogout";
-import NotificationModal from "../NotificationModal";
+import NotificationModal from "@/src/components/NotificationModal";
 import { DASHBOARD_PAGE_URL } from "@/src/constants/constants";
 
 type Props = {
@@ -31,9 +31,9 @@ export default function UserMenu({ user }: Props) {
   const handleLogout = () => {
     if (logoutMutation.isPending) return;
     setShowLogoutModal(true);
-    // Give time for modal to show before starting mutation if needed, 
-    // but mutation starts immediately and we show modal during isPending
-    logoutMutation.mutate();
+    setTimeout(() => {
+      logoutMutation.mutate();
+    }, 1000)
   };
 
   useEffect(() => {

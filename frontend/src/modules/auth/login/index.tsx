@@ -5,11 +5,11 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { loginSchema } from "./utils/validation";
-import { useLogin } from "./hooks/useLogin";
+import { loginSchema } from "@/src/modules/auth/login/utils/validation";
+import { useLogin } from "@/src/modules/auth/login/hooks/useLogin";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import NotificationModal from "../../../components/NotificationModal";
+import NotificationModal from "@/src/components/NotificationModal";
 import { DASHBOARD_PAGE_URL, REGISTER_PAGE_URL } from "@/src/constants/constants";
 
 type FormValues = z.infer<typeof loginSchema> 
@@ -42,12 +42,12 @@ export default function LoginForm() {
                 router.push(DASHBOARD_PAGE_URL);
             }, 2000);
         },
-        onError: (err) => {
+        onError: () => {
             setModal({
                 isOpen: true,
                 type: "error",
                 title: "Login Gagal",
-                message: err.message || "Email atau password salah.",
+                message: "Email atau password salah.",
             });
         }
       });

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BookingHistoryRow } from "@/src/lib/types";
-import BookingStatusBadge from "./BookingStatusBadge";
+import BookingStatusBadge from "@/src/modules/booking/components/BookingStatusBadge";
 import { BOOKING_PAGE_URL } from "@/src/constants/constants";
 
 type Props = {

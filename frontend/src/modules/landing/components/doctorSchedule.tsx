@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { getTopDoctors } from "../utils/helper";
+import { getTopDoctors } from "@/src/modules/landing/utils/helper";
 import { fetchDoctors } from "@/src/lib/api";
 import { getUpcomingSchedule } from "@/src/utils/scheduleHelper";
 import { LOGIN_PAGE_URL } from "@/src/constants/constants";

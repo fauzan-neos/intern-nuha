@@ -3,7 +3,7 @@
 import { RefObject } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { NavItem } from "./navItems";
+import { NavItem } from "@/src/components/navbar/navItems";
 
 type Props = {
   navItems: NavItem[];

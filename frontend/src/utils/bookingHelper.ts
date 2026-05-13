@@ -2,7 +2,7 @@ import {
     Booking, 
     BookingHistoryRow, 
     Doctor,
-} from "../lib/types";
+} from "@/src/lib/types";
 
 // Format baris history booking
 export function formatBookingHistoryRows(

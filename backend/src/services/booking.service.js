@@ -2,7 +2,7 @@ const bookingRepository = require("../repositories/booking.repository");
 const prisma = require("../config/prisma");
 
 async function createBookingService(userId, bookingData) {
-    // 1. Validasi Jadwal & Kuota
+    // Validasi Jadwal & Kuota
     const schedule = await prisma.doctorSchedule.findUnique({
         where: { id: bookingData.scheduleId }
     });
@@ -49,7 +49,7 @@ async function createBookingService(userId, bookingData) {
         throw new Error("Kuota untuk jam ini sudah penuh");
     }
 
-    // 1. Ambil data dokter untuk mendapatkan employeeCode
+    // Ambil data dokter untuk mendapatkan employeeCode
     const doctor = await prisma.doctor.findUnique({
         where: { id: bookingData.doctorId }
     });
@@ -75,7 +75,7 @@ async function createBookingService(userId, bookingData) {
     const paddedSequence = sequence.toString().padStart(3, '0');
     const bookingCode = `${doctor.employeeCode}-${paddedSequence}`;
 
-    // 3. Simpan ke Database
+    // Simpan ke Database
     return await bookingRepository.createBooking({
         ...bookingData,
         userId,
@@ -117,39 +117,44 @@ async function cancelBookingService(uuid, userId) {
 }
 
 async function generateAvailableSlots(doctorId, date, scheduleId) {
+    // cari jadwal dokter berdasarkan scheduleId
     const schedule = await prisma.doctorSchedule.findUnique({
         where: { id: parseInt(scheduleId) }
     });
 
+    // jika jadwal ga ada / dokter salah / status dokter off, return array kosong
     if (!schedule || schedule.doctorId !== doctorId || schedule.status === "OFF") {
         return [];
     }
 
-    const now = new Date();
-    const todayStr = now.toISOString().split('T')[0];
-    const isToday = date === todayStr;
+    // cek jika tanggal yang diminta user adalah hari ini
+    const now = new Date(); // Tanggal dan jam lokal saat ini
+    const todayStr = now.toISOString().split('T')[0]; // format jadi YYYY-MM-DD
+    const isToday = date === todayStr; // cek apakah tanggalnya sama
 
-    // Hitung slot (1 jam per pasien)
+    // Hitung slot berdasarkan jam kerja dokter dan kapasitas per slot
     const slots = [];
-    const startHour = parseInt(schedule.start.split(":")[0]);
-    const endHour = parseInt(schedule.end.split(":")[0]);
+    const startHour = parseInt(schedule.start.split(":")[0]); // ambil jam dari format HH:MM dan ubah jadi angka, misal "08:00" jadi 8
+    const endHour = parseInt(schedule.end.split(":")[0]); // ambil jam dari format HH:MM dan ubah jadi angka, misal "17:00" jadi 17
     
     // Hitung total jam kerja efektif untuk pembagi kapasitas
-    let totalWorkingHours = endHour - startHour;
-    const hasBreak = startHour < 12 && endHour > 13;
+    let totalWorkingHours = endHour - startHour; // total jam kerja, misal 17 - 8 = 9 jam
+    const hasBreak = startHour < 12 && endHour > 13; // cek apakah melewati jam istirahat
     if (hasBreak) {
-        totalWorkingHours -= 1;
+        totalWorkingHours -= 1; // jika iya kurangi 1 
     }
 
+    // hitung kapasitas perslot
     const capacityPerSlot = Math.floor(schedule.maxPatient / totalWorkingHours);
 
     for (let hour = startHour; hour < endHour; hour++) {
-        // Skip jam istirahat 12:00 - 13:00
+        // Skip jam istirahat
         if (hour === 12) continue;
 
         // Jika hari ini, jangan munculkan jam yang sudah lewat
         if (isToday && hour <= now.getHours()) continue;
 
+        // format jam, misal 8 jadi "08:00", 13 jadi "13:00"
         const timeString = `${hour.toString().padStart(2, '0')}:00`;
         const endTimeString = `${(hour + 1).toString().padStart(2, '0')}:00`;
         
@@ -158,8 +163,8 @@ async function generateAvailableSlots(doctorId, date, scheduleId) {
             where: { 
                 doctorId, 
                 appointmentDate: date, 
-                appointmentStartTime: timeString,
-                bookingStatus: { not: "COMPLETED" } 
+                appointmentStartTime: timeString, // cek jam spesifik saat ini
+                bookingStatus: { not: "COMPLETED" } // jangan hitung yang sudah selesai
             }
         });
         

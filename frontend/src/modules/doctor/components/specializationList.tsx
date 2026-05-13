@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import SpecializationCard from "./specializationCard";
+import SpecializationCard from "@/src/modules/doctor/components/specializationCard";
 import { fetchSpecializations } from "@/src/lib/api";
 
 export default function SpecializationList() {

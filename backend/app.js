@@ -7,17 +7,22 @@ var logger = require('morgan');
 const cors = require('cors');
 
 
-var indexRouter = require('./src/routes/index');
-var usersRouter = require('./src/routes/users');
-var aboutRouter = require('./src/routes/about');
-// var registerRouter = require('./src/routes/register');
-// var loginRouter = require('./src/routes/login');
 var authRouter = require('./src/routes/auth');
 var doctorRouter = require('./src/routes/doctor');
 var bookingRouter = require('./src/routes/booking');
 var hospitalRouter = require('./src/routes/hospital');
+const cron = require('node-cron');
+const { syncSchedules } = require('./src/services/scheduleSync.service');
 
 var app = express();
+
+// buat jadwal setiap hari 
+cron.schedule('0 0 * * *', () => {
+    syncSchedules();
+});
+
+// jalankan saat server start
+syncSchedules();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -35,11 +40,6 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/about', aboutRouter);
-// app.use('/', registerRouter);
-// app.use('/', loginRouter);
 app.use('/', authRouter);
 app.use('/api', doctorRouter);
 app.use('/api/bookings', bookingRouter);

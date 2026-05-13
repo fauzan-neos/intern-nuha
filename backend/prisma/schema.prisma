@@ -69,9 +69,27 @@ model Doctor {
   specialization   Specialization @relation(fields: [specializationId], references: [id])
   specializationId Int            @map("specialization_id")
   schedules        DoctorSchedule[]
+  templates        ScheduleTemplate[]
   bookings         Booking[]
 
   @@map("doctors")
+}
+
+model ScheduleTemplate {
+  id             Int            @id @default(autoincrement())
+  uuid           String         @unique @default(uuid())
+  day            Weekday
+  start          String         
+  end            String        
+  maxPatient     Int            @default(12) @map("max_patient") 
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  // relasi
+  doctor         Doctor         @relation(fields: [doctorId], references: [id])
+  doctorId       Int            @map("doctor_id")
+
+  @@map("schedule_templates")
 }
 
 model DoctorSchedule {
@@ -129,7 +147,7 @@ model Patient {
 model Booking {
   id                Int           @id @default(autoincrement())
   uuid              String        @unique @default(uuid())
-  bookingCode       String        @unique @map("booking_code") // SW-1
+  bookingCode       String        @map("booking_code") // SW-1
   bookingStatus     BookingStatus @default(BOOKED) @map("booking_status")
   
   // Data Identitas (Dari Modal Booking)
@@ -170,6 +188,7 @@ model Booking {
   rescheduledFromId Int?          @unique @map("rescheduled_from_id")
   rescheduledTo     Booking?      @relation("Reschedule")
 
+  @@unique([bookingCode, appointmentDate])
   @@map("bookings")
 }
 

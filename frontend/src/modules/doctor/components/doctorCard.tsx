@@ -6,11 +6,11 @@ import { useRouter } from "next/navigation";
 import {
   Doctor
 } from "@/src/lib/types";
-import AvailabilityBadge, { getAvailabilityLabel } from "./AvailabilityBadge";
-import BookingModal from "./booking/BookingModal";
-import DoctorSchedulePreview from "./DoctorSchedulePreview";
+import AvailabilityBadge, { getAvailabilityLabel } from "@/src/modules/doctor/components/AvailabilityBadge";
+import BookingModal from "@/src/modules/doctor/components/booking/BookingModal";
+import DoctorSchedulePreview from "@/src/modules/doctor/components/DoctorSchedulePreview";
 import { useAuthUser } from "@/src/modules/auth/hooks/useAuthUser";
-import { getAppointmentSlots } from "@/src/utils/appointmentHelper";
+import { getAppointmentSlots } from "@/src/modules/doctor/utils/appointmentHelper";
 import { getUpcomingSchedule } from "@/src/utils/scheduleHelper";
 import { ScheduleStatus } from "@/src/lib/types";
 import { LOGIN_PAGE_URL } from "@/src/constants/constants";

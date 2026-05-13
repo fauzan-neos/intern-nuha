@@ -1,5 +1,5 @@
-import { AUTH, BOOKING, DOCTORS, HOSPITAL_UPDATES, LOGOUT, SPECIALIZATIONS, REGISTER, LOGIN } from "../constants/constants";
-import { Doctor, Specialization, Booking, HospitalUpdate, CreateBookingPayload } from "./types";
+import { AUTH, BOOKING, DOCTORS, HOSPITAL_UPDATES, LOGOUT, SPECIALIZATIONS, REGISTER, LOGIN } from "@/src/constants/constants";
+import { Doctor, Specialization, Booking, HospitalUpdate, CreateBookingPayload } from "@/src/lib/types";
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

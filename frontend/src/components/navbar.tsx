@@ -6,14 +6,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuthUser } from "@/src/modules/auth/hooks/useAuthUser";
-import NavLinks from "./navbar/NavLinks";
+import NavLinks from "@/src/components/navbar/NavLinks";
 import UserMenu from "./navbar/UserMenu";
 import {
   authenticatedNavItems,
   publicNavItems,
-} from "./navbar/navItems";
-import { useNavbarScroll } from "./navbar/useNavbarScroll";
-import { LOGIN_PAGE_URL } from "../constants/constants";
+} from "@/src/components/navbar/navItems";
+import { useNavbarScroll } from "@/src/components/navbar/useNavbarScroll";
+import { LOGIN_PAGE_URL } from "@/src/constants/constants";
 
 export default function Navbar() {
   const pathname = usePathname();

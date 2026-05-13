@@ -1,6 +1,6 @@
 import { BadgeCheck } from "lucide-react";
 import { BookingHistoryRow } from "@/src/lib/types";
-import { formatBookingStatus } from "./BookingStatusBadge";
+import { formatBookingStatus } from "@/src/modules/booking/components/BookingStatusBadge";
 
 type Props = {
   booking: BookingHistoryRow;

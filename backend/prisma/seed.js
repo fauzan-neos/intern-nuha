@@ -72,10 +72,13 @@ async function main() {
   });
 
   // Cleanup before seeding to avoid unique constraint issues with employeeCode and email
+  await prisma.booking.deleteMany({});
+  await prisma.patient.deleteMany({});
   await prisma.doctorSchedule.deleteMany({});
+  await prisma.scheduleTemplate.deleteMany({});
   await prisma.doctor.deleteMany({});
 
-  // 3. Buat Data Dokter Massal
+  // Buat Data Dokter
   const firstNames = ['Sarah', 'Marcus', 'Eko', 'Linda', 'Ahmad', 'Jessica', 'Budi', 'Siti', 'Andi', 'Rina', 'Dewi', 'Agus', 'Maya', 'Rudi', 'Nina', 'Fajar', 'Lina', 'Hendra', 'Sari', 'Tono', 'Yulia', 'Rizky', 'Dina', 'Bayu', 'Mira', 'Eka', 'Ratna', 'Wawan', 'Intan', 'Fauzan', 'Siska', 'Hadi', 'Lia', 'Rian', 'Nadia', 'Doni', 'Vina', 'Arif', 'Sinta', 'Gilang', 'Melly'];
   const lastNames = ['Wijaya', 'Holloway', 'Prasetyo', 'Kusuma', 'Fauzi', 'Tan', 'Santoso', 'Lestari', 'Saputra', 'Putri', 'Gunawan', 'Nugroho', 'Yuliana', 'Hidayat', 'Suryanto', 'Dewi', 'Kurniawan', 'Utami', 'Wibowo', 'Ramadhan'];
   const images = ['/doc_sarah.jpg', '/doc_marcus.jpg', '/doc_eko.jpg'];
@@ -133,23 +136,22 @@ async function main() {
       },
     });
 
-    // 4. Buat Jadwal Rutin (Master Schedule)
+    // Buat Jadwal Rutin (Template)
     const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     const randomDay1 = days[Math.floor(Math.random() * days.length)];
     const randomDay2 = days[(days.indexOf(randomDay1) + 2) % days.length];
     const randomDay3 = days[(days.indexOf(randomDay1) + 4) % days.length];
 
-    // Menggunakan create karena tidak ada field unik di DoctorSchedule selain ID
-    await prisma.doctorSchedule.createMany({
+    await prisma.scheduleTemplate.createMany({
       data: [
-        { doctorId: createdDoc.id, day: randomDay1, start: '09:00', end: '14:00', status: 'AVAILABLE', maxPatient: 10 },
-        { doctorId: createdDoc.id, day: randomDay2, start: '10:00', end: '15:00', status: 'AVAILABLE', maxPatient: 10 },
-        { doctorId: createdDoc.id, day: randomDay3, start: '10:00', end: '16:00', status: 'AVAILABLE', maxPatient: 10 },
+        { doctorId: createdDoc.id, day: randomDay1, start: '09:00', end: '14:00', maxPatient: 10 },
+        { doctorId: createdDoc.id, day: randomDay2, start: '10:00', end: '15:00', maxPatient: 10 },
+        { doctorId: createdDoc.id, day: randomDay3, start: '10:00', end: '16:00', maxPatient: 10 },
       ]
     });
   }
 
-  // 5. Buat Update Rumah Sakit
+  // Buat Update Rumah Sakit
   await prisma.hospitalUpdate.deleteMany({}); // Bersihkan dulu agar tidak duplikat saat seeding ulang
   await prisma.hospitalUpdate.createMany({
     data: [

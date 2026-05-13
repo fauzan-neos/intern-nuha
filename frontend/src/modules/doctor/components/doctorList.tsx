@@ -16,12 +16,12 @@ export default function DoctorList({ specialization, search }: Props) {
   })
 
   const filtered = doctorsData?.filter((doctor) => {
-    // 1. Filter berdasarkan Nama (Search)
+    // Filter berdasarkan Nama (Search)
     const matchSearch = !search || doctor.name
       .toLowerCase()
       .includes(search.toLowerCase());
 
-    // 2. Filter berdasarkan Spesialisasi (bisa UUID atau Nama)
+    // Filter berdasarkan Spesialisasi (bisa UUID atau Nama)
     const matchSpec = !specialization ||
       doctor.specialization?.uuid === specialization ||
       doctor.specialization?.name === specialization;
